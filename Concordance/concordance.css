@@ -20,10 +20,13 @@
 	padding: 20px;
 	border: 1px solid #888;
 	width: 80%;
+	padding-bottom: 50px;
+	margin-bottom: 100px;
 }
 
 .modal-table {
 	width: 100%;
+	font-family: serif;
 }
 
 .modal-text-left {
@@ -43,20 +46,28 @@
 }
 
 .positive {
-	color: blue;
+	color: #11AA00;
 }
 .negative {
-	color: red;
+	color: #C70039;
 }
 
-/* The Close Button */
-.close {
+/* Modal Controls */
+.static {
 	color: #aaaaaa;
-	float: right;
 	font-size: 28px;
 	font-weight: bold;
 }
 
+.navigate {
+}
+
+.close {
+	float: right;
+}
+
+.navigate:hover,
+.navigate:focus,
 .close:hover,
 .close:focus {
 	color: #000;

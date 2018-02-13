@@ -1,4 +1,13 @@
-function concordance(text, data, sentence_access = null, sentiment_access = null) {
+/**
+ * @brief	concordance			Creates a concordance in a "modal dialog" form.
+ * @param	text				Root word or phrase.
+ * @param	data				Data.
+ * @param	sentence_access		Access function to "sentence".
+ * @param	sentiment_access	Access function to "sentiment".
+ * @param	page_size			Page size.
+ */
+
+function concordance(text, data, sentence_access = null, sentiment_access = null, page_size = 10) {
 
 	// Creates "modal dialog".
 	var modal = document.createElement('div');
@@ -8,19 +17,96 @@ function concordance(text, data, sentence_access = null, sentiment_access = null
 	var content = document.createElement('div');
 	content.className = 'modal-content';
 
+	// Paging variables.
+	var page = 1;
+	var current = 0;
+	var last = [];
+	last[page] = current;
+
+	// Controls.
+	var back = document.createElement('span');
+	back.className = 'static navigate';
+	back.innerHTML = "&#x25C5;";
+
+	var number = document.createElement('span');
+	number.className = 'static';
+	number.innerHTML = "&nbsp;" + page + "&nbsp;";
+
+	var next = document.createElement('span');
+	next.className = 'static navigate';
+	next.innerHTML = "&#x25BB;";
+
 	var close = document.createElement('span');
-	close.className = 'close';
+	close.className = 'static close';
 	close.innerHTML = "&times;";
 
 	// Content.
 	var concordance = document.createElement('table');
 	concordance.className = "modal-table";
 
-	if (sentence_access != null)
-	{
-		for (var i = 0; i < data.length; i ++) {
+	content.appendChild(back);
+	content.appendChild(number);
+	content.appendChild(next);
+	content.appendChild(close);
+	content.appendChild(concordance);
+	modal.appendChild(content);
 
-			var str = sentence_access(data[i]);
+	// Write to document.
+	document.body.appendChild(modal);
+
+	// Update.
+	update();
+
+	// Back.
+	back.onclick = function() {
+		if (page > 1) {
+			page --;
+			current = last[page];
+			update();
+		}
+	}
+
+	// Next.
+	next.onclick = function() {
+		if (current < data.length - 1) {
+			current ++;
+			page ++;
+			last[page] = current;
+			update();
+		}
+	}
+
+	// Closes "modal dialog".
+	var restore = window.onclick;
+
+	function exit() {
+		modal.outerHTML = "";
+		window.onclick = restore;
+	}
+
+	close.onclick = function() {
+		exit();
+	}
+
+	window.onclick = function(event) {
+		if (event.target == modal) {
+			exit();
+		}
+	}
+
+	// Fill content.
+	function update() {
+
+		if (sentence_access == null) {
+			return;
+		}
+
+		concordance.innerHTML = "";
+		number.innerHTML = "&nbsp;" + page + "&nbsp;";
+
+		for (var j = 0; current < data.length; current ++) {
+
+			var str = sentence_access(data[current]);
 
 			// Find text.
 			var n = str.search(text);
@@ -28,6 +114,8 @@ function concordance(text, data, sentence_access = null, sentiment_access = null
 			if (n === -1) {
 				continue;
 			}
+
+			j ++;
 
 			// Creates new entry.
 			var row = document.createElement('tr');
@@ -49,7 +137,7 @@ function concordance(text, data, sentence_access = null, sentiment_access = null
 			// Color.
 			if (sentiment_access != null)
 			{
-				if (sentiment_access(data[i])) {
+				if (sentiment_access(data[current])) {
 					center.className += " positive";
 				}
 				else {
@@ -62,31 +150,10 @@ function concordance(text, data, sentence_access = null, sentiment_access = null
 			row.appendChild(right);
 
 			concordance.appendChild(row);
-		}
-	}
 
-	content.appendChild(close);
-	content.appendChild(concordance);
-	modal.appendChild(content);
-
-	// Write to document.
-	document.body.appendChild(modal);
-
-	// Closes "modal dialog".
-	var restore = window.onclick;
-
-	function exit() {
-		modal.outerHTML = "";
-		window.onclick = restore;
-	}
-
-	close.onclick = function() {
-		exit();
-	}
-
-	window.onclick = function(event) {
-		if (event.target == modal) {
-			exit();
+			if (j === page_size) {
+				break;
+			}
 		}
 	}
 }
