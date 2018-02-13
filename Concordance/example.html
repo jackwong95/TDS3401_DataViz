@@ -15,6 +15,7 @@
 
 	<script src="concordance.js"></script>
 	<script>
+		"use strict";
 
 		var btn = document.getElementById("btn");
 
@@ -28,7 +29,7 @@
 			{"sentence": "This is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence 7.", "sentiment": 0},
 			{"sentence": "This is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence 8.", "sentiment": 0},
 			{"sentence": "Won't be displayed.", "sentiment": 0}
-		]
+		];
 
 		btn.onclick = function() {
 			concordance("sentence", data, function(d) { return d.sentence; }, function(d) { return d.sentiment; });
