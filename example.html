@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	Concordance Modal Dialog Example
+
+	<link rel="stylesheet" href="concordance.css">
+
+</head>
+<body>
+
+	<p> View page source to see the data for the concordance. </p>
+
+	<button id="btn"> Open </button>
+
+	<script src="concordance.js"></script>
+	<script>
+
+		var btn = document.getElementById("btn");
+
+		var data = [
+			{"sentence": "This is a sentence 1.", "sentiment": 1},
+			{"sentence": "This is a sentence 2.", "sentiment": 0},
+			{"sentence": "This is a sentence 3.", "sentiment": 0},
+			{"sentence": "This is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence 4.", "sentiment": 1},
+			{"sentence": "This is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence 5.", "sentiment": 1},
+			{"sentence": "This is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence 6.", "sentiment": 0},
+			{"sentence": "This is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence 7.", "sentiment": 0},
+			{"sentence": "This is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence sentence 8.", "sentiment": 0},
+			{"sentence": "Won't be displayed.", "sentiment": 0}
+		]
+
+		btn.onclick = function() {
+			concordance("sentence", data);
+		}
+
+	</script>
+
+</body>
+</html>
