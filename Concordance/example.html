@@ -31,7 +31,7 @@
 		]
 
 		btn.onclick = function() {
-			concordance("sentence", data);
+			concordance("sentence", data, function(d) { return d.sentence; }, function(d) { return d.sentiment; });
 		}
 
 	</script>
