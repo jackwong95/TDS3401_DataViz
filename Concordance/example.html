@@ -75,7 +75,7 @@
 		];
 
 		btn.onclick = function() {
-			concordance("sentence", data, function(d) { return d.sentence; }, function(d) { return d.sentiment; }, 15);
+			concordance("sentence", data, function(d) { return d.sentence; }, function(d) { if (d.sentiment) { return "#11AA00"; } else { return "#C70039"; } }, 15);
 		}
 
 	</script>

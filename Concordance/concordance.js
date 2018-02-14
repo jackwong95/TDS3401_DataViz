@@ -7,7 +7,7 @@
  * @param	page_size			Page size.
  */
 
-function concordance(text, data, sentence_access = null, sentiment_access = null, page_size = 10) {
+function concordance(text, data, sentence_access = null, text_color = null, page_size = 10) {
 
 	// Creates "modal dialog".
 	var modal = document.createElement('div');
@@ -135,14 +135,8 @@ function concordance(text, data, sentence_access = null, sentiment_access = null
 			right.innerHTML = str.substr(n + text.length);
 
 			// Color.
-			if (sentiment_access != null)
-			{
-				if (sentiment_access(data[current])) {
-					center.className += " positive";
-				}
-				else {
-					center.className += " negative";
-				}
+			if (text_color != null) {
+				center.style.color = text_color(data[current]);
 			}
 
 			row.appendChild(left);
