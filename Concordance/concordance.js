@@ -1,10 +1,10 @@
 /**
- * @brief	concordance			Creates a concordance in a "modal dialog" form.
- * @param	text				Root word or phrase.
- * @param	data				Data.
+ * @brief	concordance		Creates a concordance in a "modal dialog" form.
+ * @param	text			Root word or phrase.
+ * @param	data			Data.
  * @param	sentence_access		Access function to "sentence".
  * @param	sentiment_access	Access function to "sentiment".
- * @param	page_size			Page size.
+ * @param	page_size		Page size.
  */
 
 function concordance(text, data, sentence_access = null, text_color = null, page_size = 10) {
