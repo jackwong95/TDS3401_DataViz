@@ -1,46 +1,22 @@
-<!DOCTYPE html>
 
-<html lang="en">
-
-<head>
-	<meta charset="UTF-8" />
-	<title>graph</title>
-	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-	<link rel="stylesheet" href="barchart.css">
-</head>
-
-<body>
-
-	<script type="text/javascript">
-	var margin = {top: 20, right: 160, bottom: 35, left: 30};
-
-	var width = 960;
-	var height = 500;
-
+function barchart(data, chart_sz, svg_id = "svg_bar", margin = {left:0, top:0, right:0, bottom:0}, graph_properties = {colors:["#11AA00", "#C70039"], show:40, order:"DSC"})
+{
 	var svg = d3.select("body")
-	  .append("svg")
-	  .attr("width", width + margin.left + margin.right)
-	  .attr("height", height + margin.top + margin.bottom)
-	  .attr("x", 100)
-	  .attr("y", 100)
-	  .append("g")
-	  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-	var data = [
-	  { word: "w1", positive: "10", negative: "7" },
-	  { word: "w2", positive: "8", negative: "4" },
-	  { word: "w3", positive: "7", negative: "2" },
-	  { word: "w4", positive: "7", negative: "2" },
-	  { word: "w5", positive: "15", negative: "6" },
-	  { word: "w6", positive: "20", negative: "40" },
-	  { word: "w7", positive: "5", negative: "1" },
-	  { word: "w8", positive: "7", negative: "13" },
-	  { word: "w9", positive: "5", negative: "12" },
-	  { word: "w10", positive: "2", negative: "12" },
-	  { word: "w11", positive: "12", negative: "15" },
-	];
+		.append("svg")
+		.attr("id", svg_id)
+		.attr("width", chart_sz.width + margin.left + margin.right)
+		.attr("height", chart_sz.height + margin.top + margin.bottom)
+		.append("g")
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 	
-	data.sort(function(a, b){ return (b.positive + b.negative) - (a.positive + a.negative) });
+	data.sort(function(a, b)
+	{ 
+		var a = parseInt(a.positive) + parseInt(a.negative);
+		var b = parseInt(b.positive) + parseInt(b.negative);
+		return (graph_properties.order=="ASC"?(a - b):(b - a));
+	});
+	
+	data = data.slice(1, graph_properties.show+1);
 	
 	// Transpose the data into layers
 	var dataset = d3.layout.stack()(["positive", "negative"].map(function(sentiment)
@@ -50,28 +26,23 @@
 			return {x: d.word, y: +d[sentiment]}; // +d to get sum length of the current bar
 		});
 	}));
-	
-	dataset.sort(function(x, y){
-		return d3.ascending(x['y'], y['y']);
-	})
-	
+
 	// Set x, y and colors
 	var x = d3.scale.ordinal()
 		.domain(dataset[0].map(function(d) { return d.x; }))
-		.rangeRoundBands([10, width-10], 0.02);
+		.rangeRoundBands([10, chart_sz.width-10], 0.02);
 
 	var y = d3.scale.linear()
 		.domain([0, d3.max(dataset, function(d) {  return d3.max(d, function(d) { return d.y0 + d.y; });  })])
-		.range([height, 0]);
+		.range([chart_sz.height, 0]);
 
-	var colors = ["#11AA00", "#C70039"];
 
 	// Define and draw axes
 	var yAxis = d3.svg.axis()
 		.scale(y)
 		.orient("left")
 		.ticks(5)
-		.tickSize(-width, 0, 0)
+		.tickSize(-chart_sz.width, 0, 0)
 		.tickFormat( function(d) { return d } );
 
 	var xAxis = d3.svg.axis()
@@ -84,7 +55,7 @@
 
 	svg.append("g")
 		.attr("class", "x axis")
-		.attr("transform", "translate(0," + height + ")")
+		.attr("transform", "translate(0," + chart_sz.height + ")")
 		.call(xAxis);
 
 	// Create groups for each series, rects for each segment 
@@ -92,7 +63,7 @@
 		.data(dataset)
 		.enter().append("g")
 		.attr("class", "cost")
-		.style("fill", function(d, i) { return colors[i]; });
+		.style("fill", function(d, i) { return graph_properties.colors[i]; });
 
 	// Prep the tooltip bits, initial display is hidden
 	var tooltip = svg.append("g")
@@ -137,19 +108,19 @@
 
 	// Draw legend
 	var legend = svg.selectAll(".legend")
-		.data(colors)
+		.data(graph_properties.colors)
 		.enter().append("g")
 		.attr("class", "legend")
 		.attr("transform", function(d, i) { return "translate(30," + i * 19 + ")"; });
 	 
 	legend.append("rect")
-		.attr("x", width - 18)
+		.attr("x", chart_sz.width - 18)
 		.attr("width", 18)
 		.attr("height", 18)
-		.style("fill", function(d, i) {return colors.slice().reverse()[i];});
+		.style("fill", function(d, i) {return graph_properties.colors.slice().reverse()[i];});
 	 
 	legend.append("text")
-		.attr("x", width + 5)
+		.attr("x", chart_sz.width + 5)
 		.attr("y", 9)
 		.attr("dy", ".35em")
 		.style("text-anchor", "start")
@@ -161,7 +132,4 @@
 				case 1: return "Positive";
 			}
 		});
-	
-	</script>
-</body>
-</html>
+}

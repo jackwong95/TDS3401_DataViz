@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>graph</title>
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<link rel="stylesheet" href="barchart.css">
+</head>
+
+<body>
+
+	<script src="./barchart.js" type="text/javascript"></script>
+	
+	<script type="text/javascript">
+	var data = [
+	  { word: "w1", positive: "10", negative: "7" },
+	  { word: "w2", positive: "8", negative: "4" },
+	  { word: "w3", positive: "7", negative: "2" },
+	  { word: "w4", positive: "7", negative: "2" },
+	  { word: "w5", positive: "15", negative: "6" },
+	  { word: "w6", positive: "20", negative: "40" },
+	  { word: "w7", positive: "5", negative: "1" },
+	  { word: "w8", positive: "7", negative: "13" },
+	  { word: "w9", positive: "5", negative: "12" },
+	  { word: "w10", positive: "2", negative: "12" },
+	  { word: "w11", positive: "12", negative: "15" },
+	  { word: "w12", positive: "10", negative: "7" },
+	  { word: "w13", positive: "8", negative: "4" },
+	  { word: "w14", positive: "7", negative: "2" },
+	  { word: "w15", positive: "7", negative: "2" },
+	  { word: "w16", positive: "15", negative: "6" },
+	  { word: "w17", positive: "20", negative: "40" },
+	  { word: "w18", positive: "5", negative: "1" },
+	  { word: "w19", positive: "7", negative: "13" },
+	  { word: "w20", positive: "5", negative: "12" },
+	  { word: "w21", positive: "2", negative: "12" },
+	  { word: "w22", positive: "12", negative: "15" },
+	  { word: "w31", positive: "10", negative: "7" },
+	  { word: "w32", positive: "8", negative: "4" },
+	  { word: "w33", positive: "7", negative: "2" },
+	  { word: "w34", positive: "7", negative: "2" },
+	  { word: "w35", positive: "15", negative: "6" },
+	  { word: "w36", positive: "20", negative: "40" },
+	  { word: "w37", positive: "5", negative: "1" },
+	  { word: "w38", positive: "7", negative: "13" },
+	  { word: "w39", positive: "5", negative: "12" },
+	  { word: "w40", positive: "5", negative: "12" },
+	];
+	
+	var colors = ["#11AA00", "#C70039"];
+	var chart_sz = {height: 500, width:1000};
+	var margin = {top:20, bottom:20, left:20, right:200};
+	var graph_properties = {colors:["#11AA00", "#C70039"], show:10, order:"DSC"}
+
+	// colors = ["#11AA00", "#C70039"], show=40, order="DSC"
+	// ASC for ascending
+	// DSC for descending
+	barchart(data, chart_sz, "svg_barchart", margin, graph_properties);
+	</script>
+	
+</body>
+</html>
