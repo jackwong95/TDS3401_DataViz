@@ -1,5 +1,5 @@
 
-function barchart(data, chart_sz, svg_id = "svg_bar", margin = {left:0, top:0, right:0, bottom:0}, graph_properties = {colors:["#11AA00", "#C70039"], show:40, order:"DSC"})
+function barchart(data, chart_sz, svg_id = "svg_bar", margin = {left:0, top:0, right:0, bottom:0}, graph_properties = {colors:["#11AA00", "#C70039"], show:40, order:"DSC"}, onclick = null)
 {
 	var svg = d3.select("body")
 		.append("svg")
@@ -101,6 +101,14 @@ function barchart(data, chart_sz, svg_id = "svg_bar", margin = {left:0, top:0, r
 				tooltip.select("text").text(d.y);
 			}
 		)
+		.on("click", function (d)
+			{
+				if (onclick)
+				{
+					onclick(d.x);
+				}
+			}
+		)
 		.transition()
 		.duration(1500)
 		.delay(function(d, i) { return i * 250; }) // different delay for each bar
@@ -112,13 +120,13 @@ function barchart(data, chart_sz, svg_id = "svg_bar", margin = {left:0, top:0, r
 		.enter().append("g")
 		.attr("class", "legend")
 		.attr("transform", function(d, i) { return "translate(30," + i * 19 + ")"; });
-	 
+
 	legend.append("rect")
 		.attr("x", chart_sz.width - 18)
 		.attr("width", 18)
 		.attr("height", 18)
 		.style("fill", function(d, i) {return graph_properties.colors.slice().reverse()[i];});
-	 
+
 	legend.append("text")
 		.attr("x", chart_sz.width + 5)
 		.attr("y", 9)
