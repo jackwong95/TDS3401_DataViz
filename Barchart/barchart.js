@@ -1,5 +1,5 @@
-
-function barchart(data, chart_sz, svg_id = "svg_bar", margin = {left:0, top:0, right:0, bottom:0}, graph_properties = {colors:["#11AA00", "#C70039"], show:40, order:"DSC"}, onclick = null)
+//http://bl.ocks.org/enjalot/1429426
+function create_barchart(data, chart_sz, svg_id = "svg_bar", margin = {left:0, top:0, right:0, bottom:0}, graph_properties = {colors:["#11AA00", "#C70039"], show:40, order:"DSC"}, onclick = null)
 {
 	var svg = d3.select("body")
 		.append("svg")
@@ -57,7 +57,9 @@ function barchart(data, chart_sz, svg_id = "svg_bar", margin = {left:0, top:0, r
 		.attr("class", "x axis")
 		.attr("transform", "translate(0," + chart_sz.height + ")")
 		.call(xAxis);
-
+	
+	var vis = d3.select("#barchart");
+	
 	// Create groups for each series, rects for each segment 
 	var groups = svg.selectAll("g.cost")
 		.data(dataset)
@@ -83,10 +85,21 @@ function barchart(data, chart_sz, svg_id = "svg_bar", margin = {left:0, top:0, r
 		.attr("font-size", "12px")
 		.attr("font-weight", "bold");
 
-	var rect = groups.selectAll("rect")
-		.data(function(d) { return d; })
-		.enter()
+	var bars = groups.selectAll(".bar_rect")
+		.data(function(d) { return d; });
+		
+	// update	
+	bars.attr("x", function(d) { return x(d.x); })
+		.attr("y", function(d) { return y(d.y0 + d.y); })
+		.attr("width", x.rangeBand())
+		.transition()
+		.duration(1500)
+		.attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); });	
+	
+	// enter
+	bars.enter()
 		.append("rect")
+		.attr("class", "bar_rect")
 		.attr("x", function(d) { return x(d.x); })
 		.attr("y", function(d) { return y(d.y0 + d.y); })
 		.attr("height", 0)
@@ -114,11 +127,20 @@ function barchart(data, chart_sz, svg_id = "svg_bar", margin = {left:0, top:0, r
 		.delay(function(d, i) { return i * 250; }) // different delay for each bar
 		.attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); });
 
+	// exit
+	bars.exit()
+		.transition()
+		.duration(300)
+		.attr("y", y(0))
+		.attr("height", chart_sz.height - y(0))
+		.style("fill-opacity", 1e-6)
+		.remove();
+		
 	// Draw legend
-	var legend = svg.selectAll(".legend")
+	var legend = svg.selectAll(".bar_legend")
 		.data(graph_properties.colors)
 		.enter().append("g")
-		.attr("class", "legend")
+		.attr("class", "bar_legend")
 		.attr("transform", function(d, i) { return "translate(30," + i * 19 + ")"; });
 
 	legend.append("rect")

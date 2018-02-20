@@ -11,12 +11,60 @@
 </head>
 
 <body>
-
+	
+	<form>
+		Query : <input id="text_query" type="text" name="text_query" placeholder="enter the word""><br>
+		Ascending : <input id="asc_order" type="radio" name="sorting_order" value="ascending" onchange="order_changed()"><br>
+		Descending : <input id="dsc_order" type="radio" name="sorting_order" value="descending" onchange="order_changed()"checked><br>
+		Bar count : <input id="bar_count" type="number" name="bar_count" value="20" onchange="barcount_changed()">
+	</form>
+	
 	<script src="./barchart.js" type="text/javascript"></script>
 	<script src="../Concordance/concordance.js" type="text/javascript"></script>
 	
 	<script type="text/javascript">
-	var data = [
+	
+	var text_query = document.getElementById('text_query');
+	text_query.onkeyup = function()
+	{
+	
+		selected_data = new Array();
+		
+		for (var key in raw_data)
+		{
+			var temp = raw_data[key].word;
+			
+			// current word contains the query
+			if (temp.includes(text_query.value))
+			{
+				selected_data.push(raw_data[key]);
+			}
+		}
+		
+		create_barchart(selected_data, chart_sz, "svg_barchart", margin, graph_properties, concordance_integration);
+	}
+	
+	function order_changed()
+	{
+		var asc_order = false;
+		if (document.getElementById('dsc_order').checked)
+		{
+			asc_order = true;
+		}
+		
+		graph_properties.order = (asc_order)?"ASC":"DSC";
+		create_barchart(selected_data, chart_sz, "svg_barchart", margin, graph_properties, concordance_integration);
+	}
+	
+	function barcount_changed()
+	{
+		var barcount_number = parseInt(document.getElementById('bar_count').value);
+		graph_properties.show = barcount_number;
+		
+		create_barchart(selected_data, chart_sz, "svg_barchart", margin, graph_properties, concordance_integration);
+	}
+	
+	var raw_data = [
 	  { word: "w1", positive: "10", negative: "7" },
 	  { word: "w2", positive: "8", negative: "4" },
 	  { word: "w3", positive: "7", negative: "2" },
@@ -50,7 +98,15 @@
 	  { word: "w39", positive: "5", negative: "12" },
 	  { word: "w40", positive: "5", negative: "12" },
 	];
-
+	
+	// clone data currently selected
+	var selected_data = new Array();
+	// clone 
+	Object.keys(raw_data).forEach(function(key)
+	{
+     selected_data.push(raw_data[key]);
+	}); 
+	
 	var concordance_integration_data = [
 		{ "sentence": "w1 test test test test", "sentiment": 0},
 		{ "sentence": "w1 test test test test", "sentiment": 1},
@@ -83,12 +139,11 @@
 	var colors = ["#11AA00", "#C70039"];
 	var chart_sz = {height: 500, width:1000};
 	var margin = {top:20, bottom:20, left:20, right:200};
-	var graph_properties = {colors:["#11AA00", "#C70039"], show:10, order:"DSC"}
-
-	// colors = ["#11AA00", "#C70039"], show=40, order="DSC"
+	var graph_properties = {colors:["#11AA00", "#C70039"], show:10, order:"DSC", query:""}
+	
 	// ASC for ascending
 	// DSC for descending
-	barchart(data, chart_sz, "svg_barchart", margin, graph_properties, concordance_integration);
+	create_barchart(selected_data, chart_sz, "svg_barchart", margin, graph_properties, concordance_integration);
 	</script>
 	
 </body>
