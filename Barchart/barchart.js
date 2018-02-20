@@ -108,8 +108,8 @@ function init(data, chart_sz, svg, margin = {left:0, top:0, right:0, bottom:0}, 
 			}
 		)
 		.transition()
-		.duration(1500)
-		.delay(function(d, i) { return i * 250; }) // different delay for each bar
+		.duration(1000)
+		.delay(function(d, i) { return i * 150; }) // different delay for each bar
 		.attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); });
 		
 	// Prep the tooltip bits, initial display is hidden
