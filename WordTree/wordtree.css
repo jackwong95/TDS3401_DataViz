@@ -1,0 +1,21 @@
+.static {
+	color: #aaaaaa;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.navigate {
+}
+
+.close {
+	float: right;
+}
+
+.navigate:hover,
+.navigate:focus,
+.close:hover,
+.close:focus {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
+}
