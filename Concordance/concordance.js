@@ -1,9 +1,9 @@
 /**
  * @brief	concordance		Creates a concordance in a "modal dialog" form.
  * @param	text			Root word or phrase.
- * @param	data			Data.
- * @param	sentence_access		Access function to "sentence".
- * @param	sentiment_access	Access function to "sentiment".
+ * @param	data			Data, an array of objects which should contain at least one sentence field.
+ * @param	sentence_access		Access function to the sentence.
+ * @param	text_color		Color function with one parameter, data[i].
  * @param	page_size		Page size.
  */
 
