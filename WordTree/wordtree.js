@@ -75,7 +75,7 @@ function word_tree(placeholder_id, data, header, sentence_access = null, row_col
 			}
 			if (t != "") {
 				show(false);
-				options.wordtree.word = t;
+				options.wordtree.word = t.replace(/\W/g, '');
 				wordtree.draw(tree_data, options);
 			}
 		};
