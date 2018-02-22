@@ -10,7 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Vollkorn">
 	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Barlow">
 	<link rel="stylesheet" href="../Concordance/concordance.css">
-
+	<link rel="stylesheet" type="text/css" href="../WordTree/wordtree.css">
 	<link rel="stylesheet" type="text/css" href="./dashboard.css">
 
 </head>
@@ -70,20 +70,22 @@
 		<svg id="svg_sankey"></svg>
 	</div>
 
-	<div id="word_tree" class="svg_div">
+	<div id="wt_container" class="svg_div">
 		<div class="graph_header">
 			<span><a class="header_text">Word Tree</a></span>
 		</div>
-		<svg id="svg_wordtree"></svg>
+		<div id="wt"></div>
 	</div>
 
 	<script type="text/javascript" src="./dashboard.js"></script>
 	<script type="text/javascript" src="../Concordance/concordance.js"></script>
 
-
     <script type="text/javascript" src="../Wordcloud/src/tagcloud.jquery.js"></script>
 	<script type="text/javascript" src="../Wordcloud/wordglobe.js"></script>
 
+	<script src="https://www.gstatic.com/charts/loader.js"></script>
+	<script src="../WordTree/wordtree.js"></script>
+	
 	<script type="text/javascript">
 	
 	var text_query = document.getElementById('text_query');
@@ -167,16 +169,6 @@
 		barchart_data[count].positive = (word_table[w].positive) ? word_table[w].positive : 0;
 		barchart_data[count].negative = (word_table[w].negative) ? word_table[w].negative : 0;
 		count ++;
-	}
-
-	document.getElementById("bar_count").onkeyup = function() {
-		var spinner = document.getElementById("bar_count");
-		if (spinner.value < spinner.min) {
-			spinner.value = spinner.min;
-		}
-		else if (spinner.value > spinner.max) {
-			spinner.value = spinner.max;
-		}
 	}
 
 	function concordance_integration(d) {
@@ -264,31 +256,32 @@
 
     function onTagSelected (d)
     {
-        console.log(d.path[0].innerHTML);
+		concordance_integration(d.originalTarget.firstChild.data);
     }
 
-            var globe_settings = {
-                height: 300,
-                width: 300,
-                radius: 100,
-                speed: 3,
-                slower: 0.9,
-                timer: 5,
-                fontMultiplier: 15,
-                hoverStyle: {
-                    border: 'none',
-                    color: '#0b2e6f'
-                },
-                mouseOutStyle: {
-                    border: '',
-                    color: ''
-                }
-            };
+	var globe_settings = {
+		height: 300,
+		width: 300,
+		radius: 100,
+		speed: 3,
+		slower: 0.9,
+		timer: 5,
+		fontMultiplier: 15,
+		hoverStyle: {
+			border: 'none',
+			color: '#0b2e6f'
+		},
+		mouseOutStyle: {
+			border: '',
+			color: ''
+		}
+	};
 
     // show only top 100 most frequent word
     var globe_options = {"show":150, "color":"#aaa", "onclick": onTagSelected, "globe_settings":globe_settings, "div_id":"#wc", "list_id":"wc_list"};
     create_wordglobe(globe_data, globe_options);
 
+	word_tree("wt", raw_data, "", function(d) { return d.sentence; }, function(d) { return (d.sentiment) ? "#11AA00" : "#C70039"; }, 30, "suffix");
 	</script>
 	
 </body>

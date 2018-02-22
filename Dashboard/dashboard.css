@@ -121,10 +121,19 @@ body
 	width: 920px;
 }
 
-#word_tree
+#wt_container
 {
 	height: 480px;
 	width: 920px;
+}
+
+#wt
+{
+	margin-left: 50px;
+	margin-top: 25px;
+	width: 800px;
+	height: 375px;
+	overflow: auto;
 }
 
 #word_clouds

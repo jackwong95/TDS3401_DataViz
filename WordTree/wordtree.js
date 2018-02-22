@@ -81,10 +81,9 @@ function word_tree(placeholder_id, data, header, sentence_access = null, row_col
 		};
 
 		var options = {
-			animation: {
-				duration: 1000,
-				easing: 'out',
-			},
+			backgroundColor: '#eceff1',
+			fontName: 'arial',
+			maxFontSize: 12,
 			wordtree: {
 				format: 'implicit',
 				type: type,
@@ -102,6 +101,7 @@ function word_tree(placeholder_id, data, header, sentence_access = null, row_col
 		controls.style.height = "32px";
 		controls.style.paddingLeft = "8px";
 		controls.style.paddingRight = "8px";
+		controls.style.backgroundColor = "#00000000";
 
 		var back = document.createElement('span');
 		back.className = 'static navigate';
