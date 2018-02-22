@@ -14,9 +14,9 @@
 	
 	<form>
 		Query : <input id="text_query" type="text" name="text_query" placeholder="enter the word"><br>
-		Descending : <input id="dsc_order" type="radio" name="sorting_order" value="descending" onchange="order_changed()"><br>
-		Ascending : <input id="asc_order" type="radio" name="sorting_order" value="ascending" onchange="order_changed()"checked><br>
-		Bar count : <input id="bar_count" type="number" name="bar_count" min="0" value="20" onchange="barcount_changed()">
+		Descending : <input id="dsc_order" type="radio" name="sorting_order" value="descending" onchange="order_changed()" checked><br>
+		Ascending : <input id="asc_order" type="radio" name="sorting_order" value="ascending" onchange="order_changed()"><br>
+		Bar count : <input id="bar_count" type="number" name="bar_count" onchange="barcount_changed()">
 	</form>
 	
 	<svg id="svg_barchart"></svg>
@@ -31,14 +31,14 @@
 	
 		selected_data = new Array();
 		
-		for (var key in raw_data)
+		for (var key in barchart_data)
 		{
-			var temp = raw_data[key].word;
+			var temp = barchart_data[key].word;
 			
 			// current word contains the query
 			if (temp.includes(text_query.value) || temp == text_query.value)
 			{
-				selected_data.push(raw_data[key]);
+				selected_data.push(barchart_data[key]);
 			}
 		}
 		
@@ -66,49 +66,6 @@
 	}
 	
 	var raw_data = [
-	  { word: "w1", positive: "10", negative: "7" },
-	  { word: "w2", positive: "8", negative: "4" },
-	  { word: "w3", positive: "7", negative: "2" },
-	  { word: "w4", positive: "7", negative: "2" },
-	  { word: "w5", positive: "15", negative: "6" },
-	  { word: "w6", positive: "20", negative: "40" },
-	  { word: "w7", positive: "5", negative: "1" },
-	  { word: "w8", positive: "7", negative: "13" },
-	  { word: "w9", positive: "5", negative: "12" },
-	  { word: "w10", positive: "2", negative: "12" },
-	  { word: "w11", positive: "12", negative: "15" },
-	  { word: "w12", positive: "10", negative: "7" },
-	  { word: "w13", positive: "8", negative: "4" },
-	  { word: "w14", positive: "7", negative: "2" },
-	  { word: "w15", positive: "7", negative: "2" },
-	  { word: "w16", positive: "15", negative: "6" },
-	  { word: "w17", positive: "20", negative: "40" },
-	  { word: "w18", positive: "5", negative: "1" },
-	  { word: "w19", positive: "7", negative: "13" },
-	  { word: "w20", positive: "5", negative: "12" },
-	  { word: "w21", positive: "2", negative: "12" },
-	  { word: "w22", positive: "12", negative: "15" },
-	  { word: "w31", positive: "10", negative: "7" },
-	  { word: "w32", positive: "8", negative: "4" },
-	  { word: "w33", positive: "7", negative: "2" },
-	  { word: "w34", positive: "7", negative: "2" },
-	  { word: "w35", positive: "15", negative: "6" },
-	  { word: "w36", positive: "20", negative: "40" },
-	  { word: "w37", positive: "5", negative: "1" },
-	  { word: "w38", positive: "7", negative: "13" },
-	  { word: "w39", positive: "5", negative: "12" },
-	  { word: "w40", positive: "5", negative: "12" },
-	];
-	
-	// clone data currently selected
-	var selected_data = new Array();
-	// clone 
-	Object.keys(raw_data).forEach(function(key)
-	{
-     selected_data.push(raw_data[key]);
-	}); 
-	
-	var concordance_integration_data = [
 		{ "sentence": "w1 test test test test", "sentiment": 0},
 		{ "sentence": "w1 test test test test", "sentiment": 1},
 		{ "sentence": "w2 test test test test", "sentiment": 1},
@@ -118,10 +75,52 @@
 		{ "sentence": "w6 test test test test", "sentiment": 1},
 	];
 
+	var word_table = [];
+	for (var i = 0; i < raw_data.length; i ++) {
+
+		var tokens = raw_data[i].sentence.replace("/\W/g", "").split(" ");
+
+		for (var j = 0; j < tokens.length; j ++) {
+
+			if (word_table[tokens[j]] == null) {
+				word_table[tokens[j]] = {};
+			}
+
+			if (raw_data[i].sentiment) {
+				if (word_table[tokens[j]].positive) word_table[tokens[j]].positive ++;
+				else word_table[tokens[j]].positive = 1;
+			}
+			else {
+				if (word_table[tokens[j]].negative) word_table[tokens[j]].negative ++;
+				else word_table[tokens[j]].negative = 1;
+			}
+		}
+	}
+
+	var count = 0;
+	var barchart_data = [];
+	for (var w in word_table) {
+		barchart_data[count] = {};
+		barchart_data[count].word = w;
+		barchart_data[count].positive = (word_table[w].positive) ? word_table[w].positive : 0;
+		barchart_data[count].negative = (word_table[w].negative) ? word_table[w].negative : 0;
+		count ++;
+	}
+
+	document.getElementById("bar_count").onkeyup = function() {
+		var spinner = document.getElementById("bar_count");
+		if (spinner.value < spinner.min) {
+			spinner.value = spinner.min;
+		}
+		else if (spinner.value > spinner.max) {
+			spinner.value = spinner.max;
+		}
+	}
+
 	function concordance_integration(d) {
 		concordance(
 			d, // word.
-			concordance_integration_data, // data.
+			raw_data, // data.
 			function(d) { // data.sentence.
 				return d.sentence;
 			},
@@ -136,11 +135,23 @@
 			15 // page size.
 		);
 	}
+
+	// clone data currently selected
+	var selected_data = new Array();
+	// clone 
+	Object.keys(barchart_data).forEach(function(key)
+	{
+    	selected_data.push(barchart_data[key]);
+	});
 	
 	var colors = ["#11AA00", "#C70039"];
 	var chart_sz = {height: 500, width:1000};
 	var margin = {top:20, bottom:20, left:20, right:200};
 	var graph_properties = {colors:["#11AA00", "#C70039"], show:20, order:"DSC", query:""}
+
+	document.getElementById("bar_count").min = 1;
+	document.getElementById("bar_count").max = barchart_data.length - 1;
+	document.getElementById("bar_count").value = (barchart_data.length - 1 > 20) ? 20 : barchart_data.length - 1;
 	
 	// ASC for ascending
 	// DSC for descending

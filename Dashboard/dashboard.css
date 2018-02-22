@@ -1,0 +1,207 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+body
+{
+	background-color: #eceff1;
+}
+
+#wc
+{
+	margin-left: 25px;
+	display: inline-block;
+}
+
+#dashboard_header
+{
+	width: 100%;
+	height: 80px;
+	background-color: #37474f;
+	cursor: pointer;
+}
+
+#dashboard_title
+{
+	font-weight: bold;
+	margin-left: 50px;
+	margin-top: 17px;
+	font-size: 40px;
+}
+
+#dashboard_creator
+{
+	margin-left: 10px;
+	margin-top: 20px;
+	font-size: 15px;
+}
+
+#text_query
+{
+	width: 70px;
+	margin-top: 5px;
+	margin-bottom: 10px;
+}
+
+#bar_count
+{
+	width: 70px;
+	margin-top: 5px;
+	margin-bottom: 10px;
+}
+
+#order_input
+{
+	margin-top: 5px;
+	width: 70px;
+}
+
+.svg_div
+{
+	float: left;
+	margin-top: 20px;
+	margin-left: 20px;
+	border: 1px solid #4f5b62;
+}
+
+#bar_div
+{
+	width: 1490px;
+	height: 350px;
+}
+
+#sankey_div
+{
+	height: 480px;
+	width: 920px;
+}
+
+#word_tree
+{
+	height: 480px;
+	width: 920px;
+}
+
+#word_clouds
+{
+	height: 350px;
+	width: 350px;
+}
+
+.graph_header
+{
+	width: 100%;
+	border-bottom: 1px solid #4f5b52;
+	height: 50px;
+	background-color: #718792;
+}
+
+.globe_text
+{
+	font-family: 'Barlow', serif;
+	font-weight: bold;
+	font-size: 13px;
+}
+
+.header_text
+{
+	margin-top: 15px;
+	margin-left: 15px;
+	display: inline-block;
+	font-family: 'Barlow', serif;
+	color: #fff;
+	font-size: 20px;
+}
+
+.dashboard_text
+{
+	display: inline-block;
+	font-family: 'Barlow', serif;
+	color: #fff;
+}
+
+#barchart_query
+{
+	z-index: 1;
+	position: absolute;
+	top: 225px;
+	left: 1400px;
+}
+
+#svg_barchart
+{
+	position: absolute;
+	top: 150px;
+	left: 50px;
+	font: 12px sans-serif;
+	shape-rendering: crispEdges;
+}
+
+.query_label
+{
+	font-family: 'Barlow', serif;
+	font-size: 15px;
+	font-weight: bold;
+
+}
+
+.axis path, .axis line
+{
+	fill: none;
+	stroke: #000;
+}
+
+path.domain
+{
+	stroke: none;
+}
+
+.y .tick line
+{
+	stroke: #ddd;
+}

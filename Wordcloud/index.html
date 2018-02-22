@@ -1,0 +1,136 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <title>jquery tagcloud plugin demo</title>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script type="text/javascript" src="./src/tagcloud.jquery.js"></script>
+    
+    <style>
+        /* Mother effin brute force CSS reset... */
+        /* Always include after any other CSS */
+        * {
+            resize: none;
+            border: none;
+            outline: none;
+            text-decoration: none;
+            padding: 0px;
+            margin: 0px;
+            list-style-type: none;
+        }
+
+        .elem_tag
+        {
+            font-weight: bold;
+        }
+    </style>
+    <link href="./jquerysctipttop.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+    </div>
+    <div>
+        <div id="tagcloud">
+            <ul id ="wc_list">
+            </ul>
+        </div>
+        </div>
+
+    <script src="./wordglobe.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function()
+        {
+            var raw_data = [
+                { "sentence": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam volutpat dui in vulputate dapibus. Sed ac lacus finibus lorem lobortis scelerisque. In fringilla mollis lacus eget pellentesque. Pellentesque facilisis euismod sollicitudin. Aenean vehicula tellus ut nisl hendrerit, id venenatis eros tempor. Etiam nec nibh in felis blandit tristique et quis ante. Pellentesque eget justo nisi. Fusce non consequat ex. Pellentesque sed turpis lectus. Suspendisse congue massa sit amet nisi placerat viverra. Integer tempor ex at egestas laoreet. Maecenas sodales semper ligula non convallis. Vivamus rutrum lacus sed purus pulvinar placerat. In interdum dapibus justo, vitae accumsan urna tincidunt quis.", "sentiment": 0},
+                { "sentence": "Donec ornare vulputate augue sit amet dignissim. Aenean dignissim urna neque, sed faucibus urna sagittis at. Quisque quis elit leo. Nulla aliquam lorem in venenatis tristique. Nulla et diam molestie, vestibulum massa et, interdum massa. Nam elementum sed eros et pharetra. Mauris gravida ex in vestibulum malesuada. Donec sagittis metus at mattis sodales.", "sentiment": 1},
+                { "sentence": "Fusce sagittis arcu eu placerat interdum. Maecenas dolor justo, egestas id justo ac, dictum elementum tortor. Morbi et urna dolor. Quisque nec faucibus arcu, a viverra velit. Phasellus malesuada ante sed dolor interdum euismod. Quisque consequat magna et urna tincidunt, vitae dictum diam fermentum. Morbi rutrum libero et scelerisque pharetra. Pellentesque ut leo et neque rutrum viverra. Phasellus id dui purus. Ut quis finibus arcu. Proin commodo augue nec lacus maximus, ut pulvinar ipsum ultrices.", "sentiment": 1},
+                { "sentence": "Nunc nisi quam, faucibus ac arcu ac, porttitor pharetra diam. Pellentesque eu condimentum mi. Cras pulvinar eros non purus sollicitudin vulputate. Pellentesque id nibh metus. Phasellus non tortor in ipsum maximus euismod sed quis ante. Nulla dictum sollicitudin fringilla. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse varius pulvinar neque vel tempor. Maecenas gravida ligula metus, id congue felis auctor eu. Phasellus ac aliquam eros. Etiam euismod imperdiet enim vel condimentum. Pellentesque at elit at dolor pretium fringilla. Fusce sit amet aliquet ex, quis pharetra eros. Vestibulum eget dui iaculis, mollis velit vitae, rutrum augue. Pellentesque nec magna erat. Etiam fringilla tempus odio ut commodo.", "sentiment": 1},
+                { "sentence": "Vestibulum ultricies imperdiet laoreet. Nam in sagittis nibh. Pellentesque laoreet mi non risus venenatis, sit amet porttitor sapien ornare. Sed eget orci pretium, aliquam sapien a, vulputate ligula. Maecenas pellentesque tortor a lacus scelerisque feugiat eu a lorem. Vestibulum nunc nibh, rutrum ac ultricies non, ultrices quis nulla. Nulla placerat ipsum non sapien ornare tempor a sit amet erat. Pellentesque viverra, leo a dictum consectetur, justo orci varius lectus, quis imperdiet magna mi a lectus. Fusce vitae ornare risus. Morbi vehicula libero eget nibh scelerisque aliquet et vel nisl. Vestibulum suscipit luctus elit, eget venenatis nisi mattis eu. Phasellus id turpis eu orci venenatis congue. Pellentesque tempus suscipit elit ac dapibus.", "sentiment": 0},
+                { "sentence": "Quisque eget nibh mollis, interdum nunc ut, molestie turpis. Integer elit leo, mattis id mi at, lobortis facilisis eros. Sed convallis risus ut metus pellentesque sodales. Morbi ultrices eros tellus, sit amet dapibus mi fringilla vitae. Sed sollicitudin, tortor sit amet placerat ullamcorper, nisi diam pharetra augue, eu maximus enim mauris vitae lectus. Etiam dictum mi in massa maximus venenatis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed a lacinia ligula. Cras et sapien orci.", "sentiment": 0},
+                { "sentence": "Nullam eget posuere turpis. Aenean bibendum eleifend gravida. In molestie sed nisl in placerat. Pellentesque felis orci, sollicitudin feugiat scelerisque vitae, venenatis ac nibh. Cras mollis eu ligula in aliquet. Ut a enim ac nunc imperdiet bibendum eget vel leo. Donec in mattis arcu. Aliquam vulputate a lacus sit amet malesuada. Nam vel metus hendrerit, fringilla augue et, euismod tellus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nullam vel mauris in quam euismod lobortis et ut ex. Fusce egestas placerat accumsan. Duis interdum egestas tortor ut porta. Nullam iaculis, dolor in mattis volutpat, mauris erat sagittis nibh, at tristique diam purus id lacus. In pellentesque placerat tortor, id sodales dolor vulputate sed. Aliquam erat volutpat.", "sentiment": 1},
+            ];
+
+            // [0:{"val":count, ...], 1:["val":count, ...}]
+            var selected_data = {};
+            for (var key in raw_data)
+            {
+                var sent = raw_data[key].sentiment;
+                var tokens = raw_data[key].sentence.replace("/\W/g", "").split(" ");
+
+                if (selected_data[sent] == null)
+                {
+                    selected_data[sent] = new Array();
+                }
+
+                for (var tok_key in tokens)
+                {
+                    var token = tokens[tok_key];
+                    if (selected_data[sent][token] == null)
+                        selected_data[sent][token] = 0;
+
+                    selected_data[sent][token] ++;
+                }
+            }
+
+            // https://stackoverflow.com/questions/5199901/how-to-sort-an-associative-array-by-its-values-in-javascript
+            function toTrueSortedArray(data)
+            {
+                var temp = [];
+
+                for (var tok in data)
+                {
+                    temp.push([tok, data[tok]]);
+                }
+
+                temp.sort(function(a, b)
+                {
+                    return b[1] - a[1];
+                });
+
+                for (var i = 0; i < temp.length; i++)
+                {
+                    var key = temp[i][0];
+                    var value = temp[i][1];
+                }
+                return temp;
+            }
+
+            // convert data to true array
+            selected_data[0] = toTrueSortedArray(selected_data[0]);
+            selected_data[1] = toTrueSortedArray(selected_data[1]);
+
+            function onTagSelected (d)
+            {
+                console.log(d.path[0].innerHTML);
+            }
+
+            var globe_settings = {
+                height: 375,
+                width: 375,
+                radius: 100,
+                speed: 3,
+                slower: 0.9,
+                timer: 5,
+                fontMultiplier: 15,
+                hoverStyle: {
+                    border: 'none',
+                    color: '#0b2e6f'
+                },
+                mouseOutStyle: {
+                    border: '',
+                    color: ''
+                }
+            };
+
+            // show only top 100 most frequent word
+            var globe_options = {"show":150, "color":"#aaa", "onclick": onTagSelected, "globe_settings":globe_settings, "div_id":"#tagcloud", "list_id":"wc_list"};
+            create_wordglobe(selected_data[0], globe_options);
+
+        });
+    </script>
+</body>
+</html>
+
+
+

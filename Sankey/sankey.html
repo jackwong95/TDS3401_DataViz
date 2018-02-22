@@ -1,52 +1,148 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset='utf-8'>
-  <style type="text/css">
-    body
-	{
-      margin-top: 1.0em;
-      background-color: #fff;
-      font-family: Helvetica, Arial, FreeSans, san-serif;
-      color: #000;
-    }
-    #container
-	{
-      margin: 0 auto;
-      width: 90%;
-    }
-	
-  </style>
-
-	<script src="ext/raphael.js" type="text/javascript"></script>
-	<script src="ext/jquery.js" type="text/javascript"></script>
-	<script src="ext/sankey.js" type="text/javascript"></script>
-
-</head>
-
+<meta charset="utf-8">
+<title>SANKEY Experiment</title>
+<style>
+ 
+.node rect {
+  cursor: move;
+  fill-opacity: .9;
+  shape-rendering: crispEdges;
+}
+ 
+.node text {
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff;
+}
+ 
+.link {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: .2;
+}
+ 
+.link:hover {
+  stroke-opacity: .5;
+}
+ 
+</style>
 <body>
-
-
-
-  <div id="container">
-
-	<script src="./sankey.js" type="text/javascript"></script>
-	
-	<script type="text/javascript">
-       var raw_data = [["Coal reserves",63.965,"Coal"],["Coal imports",11.605761552073403,"Coal"],["Oil reserves",107.70336000383915,"Oil"],["Oil imports",504.28688593352877,"Oil"],["Gas reserves",82.2325418852722,"Ngas"],["Gas imports",40.71904824507425,"Ngas"],["UK land based bioenergy",182.0095179564277,"Bio-conversion"],["Marine algae",4.37535,"Bio-conversion"],["Agricultural 'waste'",124.72944763257163,"Bio-conversion"],["Other waste",77.8098784662769,"Bio-conversion"],["Other waste",56.58710480856814,"Solid"],["Biomass imports",35.0,"Solid"],["Biofuel imports",35.0,"Liquid"],["Coal",75.5707615520734,"Solid"],["Oil",611.990245937368,"Liquid"],["Ngas",122.95159013034645,"Gas"],["Solar",59.90102327016994,"Solar PV"],["Solar PV",59.90102327016994,"Electricity grid"],["Solar",19.26344572552911,"Solar Thermal"],[0.0,0.0,0.0],["Bio-conversion",280.321719493768,"Solid"],["Bio-conversion",0.5965046787991354,"Liquid"],["Bio-conversion",81.14419419153347,"Gas"],["Bio-conversion",26.861775691175637,"Losses"],["Solid",0.0,"Over generation / exports"],["Liquid",0.0,"Over generation / exports"],["Gas",0.0,"Over generation / exports"],["Solid",400.1202550368,"Thermal generation"],["Liquid",0.0,"Thermal generation"],["Gas",151.89074227938463,"Thermal generation"],["Nuclear",839.9776000000002,"Thermal generation"],["Thermal generation",79.3286488807059,"District heating"],["Thermal generation",525.5312099919089,"Electricity grid"],["Thermal generation",787.12873844357,"Losses"],["Solid",-0.0,"CHP"],["Liquid",-0.0,"CHP"],["Gas",-0.0,"CHP"],["CHP",0.0,"Electricity grid"],["CHP",0.0,"Losses"],["Electricity imports",0.0,"Electricity grid"],["Wind",289.36583532,"Electricity grid"],["Tidal",9.45177738904111,"Electricity grid"],["Wave",19.01301369863013,"Electricity grid"],["Geothermal",7.012800000000001,"Electricity grid"],["Hydro",6.995268000000001,"Electricity grid"],["Electricity grid",27.139563172022903,"H2 conversion"],["Electricity grid",104.45328119250553,"Over generation / exports"],["Electricity grid",56.69122682205936,"Losses"],["Gas",0.0,"H2 conversion"],["H2 conversion",20.897463642457637,"H2"],["H2 conversion",6.242099529565266,"Losses"],["Solar Thermal",19.26344572552911,"Heating and cooling - homes"],["H2",20.897463642457637,"Road transport"],["Pumped heat",193.0258107414819,"Heating and cooling - homes"],["Pumped heat",70.67214222147322,"Heating and cooling - commercial"],["CHP",0.0,"Heating and cooling - homes"],["CHP",0.0,"Heating and cooling - commercial"],["District heating",46.183951046116405,"Heating and cooling - homes"],["District heating",22.505306289554884,"Heating and cooling - commercial"],["District heating",10.639391545034607,"Industry"],["District heating",0.0,"Losses"],["Electricity grid",113.72557076767055,"Heating and cooling - homes"],["Solid",-0.0,"Heating and cooling - homes"],["Liquid",-0.0,"Heating and cooling - homes"],["Gas",-0.0,"Heating and cooling - homes"],["Electricity grid",40.857688549621756,"Heating and cooling - commercial"],["Solid",-0.0,"Heating and cooling - commercial"],["Liquid",-0.0,"Heating and cooling - commercial"],["Gas",0.12881330059119592,"Heating and cooling - commercial"],["Electricity grid",93.49442720413965,"Lighting & appliances - homes"],["Gas",0.0,"Lighting & appliances - homes"],["Electricity grid",90.00799168672461,"Lighting & appliances - commercial"],["Gas",0.0,"Lighting & appliances - commercial"],["Electricity grid",342.1650572285816,"Industry"],["Solid",46.476993647439045,"Industry"],["Liquid",121.0664998753947,"Industry"],["Gas",48.57976264221968,"Industry"],["Electricity grid",4.411685850852416,"Agriculture"],["Solid",0.8823371701704832,"Agriculture"],["Liquid",3.639640826953243,"Agriculture"],["Gas",2.0955507791548977,"Agriculture"],["Electricity grid",37.797485443866314,"Road transport"],["Liquid",135.834627478089,"Road transport"],["Electricity grid",7.862888151705466,"Rail transport"],["Liquid",4.412924602532396,"Rail transport"],["Liquid",14.45823092617519,"Domestic aviation"],["Liquid",33.21784175138628,"National navigation"],["Liquid",206.26698515563623,"International aviation"],["Liquid",128.69,"International shipping"],["Electricity grid",0.0,"Geosequestration"],["Gas",1.4009153205295084,"Losses"]];
-	
-	
-	
-		sankey();
-	</script>
-	
-	
-    <div id='sankey' style="width:100%;height:700px">
-      &nbsp;
-    </div>
-    
-  </div>
-
+ 
+<p id="chart">
+ 
+<script src="http://d3js.org/d3.v3.js"></script>
+<script src="sankey.js"></script>
+<script>
   
+var units = "Widgets";
+ 
+var margin = {top: 10, right: 10, bottom: 10, left: 10},
+    width = 1200 - margin.left - margin.right,
+    height = 740 - margin.top - margin.bottom;
+ 
+var formatNumber = d3.format(",.0f"),    // zero decimal places
+    format = function(d) { return formatNumber(d) + " " + units; },
+    color = d3.scale.category20();
+ 
+// append the svg canvas to the page
+var svg = d3.select("#chart").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", 
+          "translate(" + margin.left + "," + margin.top + ")");
+ 
+// Set the sankey diagram properties
+var sankey = d3.sankey()
+    .nodeWidth(36)
+    .nodePadding(10)
+    .size([width, height]);
+ 
+var path = sankey.link();
+ 
+// load the data
+d3.json("sankeygreenhouse.json", function(error, graph) {
+ 
+    var nodeMap = {};
+    graph.nodes.forEach(function(x) { nodeMap[x.name] = x; });
+    graph.links = graph.links.map(function(x) {
+      return {
+        source: nodeMap[x.source],
+        target: nodeMap[x.target],
+        value: x.value
+      };
+    });
+ 
+  sankey
+      .nodes(graph.nodes)
+      .links(graph.links)
+      .layout(32);
+ 
+// add in the links
+  var link = svg.append("g").selectAll(".link")
+      .data(graph.links)
+    .enter().append("path")
+      .attr("class", "link")
+      .attr("d", path)
+      .style("stroke-width", function(d) { return Math.max(1, d.dy); })
+      .sort(function(a, b) { return b.dy - a.dy; });
+ 
+// add the link titles
+  link.append("title")
+        .text(function(d) {
+        return d.source.name + " → " + 
+                d.target.name + "\n" + format(d.value); });
+ 
+// add in the nodes
+  var node = svg.append("g").selectAll(".node")
+      .data(graph.nodes)
+    .enter().append("g")
+      .attr("class", "node")
+      .attr("transform", function(d) { 
+      return "translate(" + d.x + "," + d.y + ")"; })
+    .call(d3.behavior.drag()
+      .origin(function(d) { return d; })
+      .on("dragstart", function() { 
+      this.parentNode.appendChild(this); })
+      .on("drag", dragmove));
+ 
+// add the rectangles for the nodes
+  node.append("rect")
+      .attr("height", function(d) { return d.dy; })
+      .attr("width", sankey.nodeWidth())
+      .style("fill", function(d) { 
+      return d.color = color(d.name.replace(/ .*/, "")); })
+      .style("stroke", function(d) { 
+      return d3.rgb(d.color).darker(2); })
+    .append("title")
+      .text(function(d) { 
+      return d.name + "\n" + format(d.value); });
+ 
+// add in the title for the nodes
+  node.append("text")
+      .attr("x", -6)
+      .attr("y", function(d) { return d.dy / 2; })
+      .attr("dy", ".35em")
+      .attr("text-anchor", "end")
+      .attr("transform", null)
+      .text(function(d) { return d.name; })
+    .filter(function(d) { return d.x < width / 2; })
+      .attr("x", 6 + sankey.nodeWidth())
+      .attr("text-anchor", "start");
+ 
+// the function for moving the nodes
+  function dragmove(d) {
+    d3.select(this).attr("transform", 
+        "translate(" + (
+             d.x = Math.max(0, Math.min(width - d.dx, d3.event.x))
+          ) + "," + (
+                   d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))
+            ) + ")");
+    sankey.relayout();
+    link.attr("d", path);
+  }
+});
+ 
+</script>
+ 
 </body>
 </html>
