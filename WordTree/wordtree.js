@@ -75,7 +75,7 @@ function word_tree(placeholder_id, data, header, sentence_access = null, row_col
 			}
 			if (t != "") {
 				show(false);
-				options.wordtree.word = t.replace(/\W/g, '');
+				options.wordtree.word = (t.replace(/\W/g, '') == "") ? t : t.replace(/\W/g, '');
 				wordtree.draw(tree_data, options);
 			}
 		};
@@ -83,7 +83,7 @@ function word_tree(placeholder_id, data, header, sentence_access = null, row_col
 		var options = {
 			backgroundColor: '#eceff1',
 			fontName: 'arial',
-			maxFontSize: 12,
+			maxFontSize: 24,
 			wordtree: {
 				format: 'implicit',
 				type: type,
