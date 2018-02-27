@@ -53,9 +53,11 @@
 }
 
 .navigate {
+	text-align: left;
 }
 
 .close {
+	text-align: right;
 	float: right;
 }
 
