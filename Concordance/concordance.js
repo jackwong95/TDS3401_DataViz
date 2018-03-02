@@ -7,7 +7,7 @@
  * @param	page_size		Page size.
  */
 
-function concordance(text, data, sentence_access = null, text_color = null, page_size = 10) {
+function concordance(text, data, sentence_access=null, text_color=null, page_size=10) {
 
 	// Creates "modal dialog".
 	var modal = document.createElement('div');

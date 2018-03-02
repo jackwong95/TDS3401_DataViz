@@ -1,7 +1,5 @@
-
 function draw_multibarchart(graph_properties)
 {
-
 	var sentiment = [{key:'negative', values:[]}, {key:'positive', values:[]}];
 	
 	d3.json(graph_properties.data, function(error, data)

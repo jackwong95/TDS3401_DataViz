@@ -25,9 +25,12 @@
 	display: block;
 }
 
-.modal-table {
+table.modal-table {
 	width: 100%;
 	font-family: 'Helvetica', Helvetica, Arial, sans-serif;
+	border-spacing: 10px;
+	border-collapse: separate;
+	border: 1px solid black;
 }
 
 .modal-text-left {
@@ -51,6 +54,7 @@
 	color: #aaaaaa;
 	font-size: 28px;
 	font-weight: bold;
+	margin-bottom: 12px;
 }
 
 .navigate {

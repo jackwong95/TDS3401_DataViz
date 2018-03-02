@@ -1,16 +1,22 @@
 /**
- * Only used for a very specific data.
- * Therefore, data linking mechanism is not provided. (Modify the code)
+ * @brief	Bubble	Creates a bubble and pie chart (requires a specific data format).
+ * @param	div_id	ID of the containing div.
+ * @param	name	Options.
+ * @param	file	Data files location.
  */
 
 class Bubble {
 
-	constructor(div_id, onclick = null) {
+	constructor(
+		div_id, onclick=null,
+		name=["Amazon", "IMDb", "Yelp"],
+		file=["../Data/Bubble/amazon_bubble.json", "../Data/Bubble/imdb_bubble.json", "../Data/Bubble/yelp_bubble.json"]
+		) {
 
 		// Source.
-		this.options = ["Amazon", "IMDb", "Yelp"];
-		this.source  = ["Data/amazon_bubble.json", "Data/imdb_bubble.json", "Data/yelp_bubble.json"];
-		this.loaded  = false;
+		this.option = name;
+		this.source = file;
+		this.loaded = false;
 
 		// Bubble style.
 		this.container = d3v4.select("#" + div_id);
@@ -30,21 +36,22 @@ class Bubble {
 		this.legend_space = 3;
 
 		// Filter.
+		var obj = this;
 		this.filter = this.container.append("div")
 			.append("select")
 				.style("position", "absolute")
 				.style("display", "inline-block")
-				.style("margin", "5px");
+				.style("margin", "5px")
+				.on("change", function() { obj.update(this.value); });
 
 		this.filter.selectAll("option")
 			.remove();
 
 		this.filter.selectAll("option")
-			.data(this.options).enter()
+			.data(this.option).enter()
 			.append("option")
 				.attr("value", function(opt) { return opt;})
-				.text(function(opt) { return opt; })
-				.on("change", function() { update(this.value); });
+				.text(function(opt) { return opt; });
 
 		// Bubble.
 		this.svg = this.container.append("svg")
@@ -85,12 +92,12 @@ class Bubble {
 			.await(function(error, d1, d2, d3) {
 				if (error) throw error;
 
-				obj.bubble_data[obj.options[0]] = d1;
-				obj.bubble_data[obj.options[1]] = d2;
-				obj.bubble_data[obj.options[2]] = d3;
+				obj.bubble_data[obj.option[0]] = d1;
+				obj.bubble_data[obj.option[1]] = d2;
+				obj.bubble_data[obj.option[2]] = d3;
 
 				obj.loaded = true;
-				obj.update(obj.options[0]);
+				obj.update(obj.option[0]);
 			});
 
 		// Data access.
@@ -117,8 +124,8 @@ class Bubble {
 		var obj = this;
 
 		// Draw accordingly.
-		for (var o = 0; o < obj.options.length; o ++) {
-			if (selection == obj.options[o]) {
+		for (var o = 0; o < obj.option.length; o ++) {
+			if (selection == obj.option[o]) {
 
 				if (obj.loaded) draw_bubble();
 				return;
@@ -130,8 +137,8 @@ class Bubble {
 
 		function draw_bubble() {
 
-			for (var o = 0; o < obj.options.length; o ++) {
-				if (selection == obj.options[o]) {
+			for (var o = 0; o < obj.option.length; o ++) {
+				if (selection == obj.option[o]) {
 
 					// Update filter.
 					obj.filter
@@ -139,7 +146,7 @@ class Bubble {
 						.property("text", selection);
 
 					// Data hierarchy.
-					var root = d3v4.hierarchy({"children": obj.bubble_data[obj.options[o]]})
+					var root = d3v4.hierarchy({"children": obj.bubble_data[obj.option[o]]})
 						.sum(function(d) { return d["count"]; })
 						.sort(function(a, b) { return b["count"] - a["count"]; });
 
@@ -220,8 +227,8 @@ class Bubble {
 
 			// Current selection.
 			var selection = obj.filter.property("value");
-			for (var o = 0; o < obj.options.length; o ++) {
-				if (selection == obj.options[o]) {
+			for (var o = 0; o < obj.option.length; o ++) {
+				if (selection == obj.option[o]) {
 
 					obj.tooltip.selectAll("p")
 						.remove();
@@ -232,7 +239,7 @@ class Bubble {
 					obj.tooltip.selectAll("p")
 						.style("margin", "0px 6px 12px 6px");
 
-					draw_pie(obj.bubble_data[obj.options[o]], d.data["subject"]);
+					draw_pie(obj.bubble_data[obj.option[o]], d.data["subject"]);
 
 					break;
 				}
