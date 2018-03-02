@@ -47,8 +47,8 @@ function draw_wordcloud(graph_properties)
 			.call(xAxis)
 				.selectAll('text')
 				.attr("class", "wc_text")
-				.style('fill',function(d) { console.log(d); return color(d); })
-				.on('click',function(d) { graph_properties.category.click(d); })
+				.style('fill',function(d) { return color(d); })
+				.on('click',function(d) { if (graph_properties.category.click != null ) graph_properties.category.click(d); })
 				.on('mouseover',function(d) { d3.select(this).style("fill", graph_properties.category.outline_bg); })
 				.on('mouseout',function(d) { d3.select(this).style("fill", color(d)); });
 				
@@ -80,7 +80,7 @@ function draw_wordcloud(graph_properties)
 					.attr("text-anchor", "middle")
 					.attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
 					.text(function(d) { return d.text; })
-					.on("click", function(d){ graph_properties.words.click(d); })
+					.on("click", function(d){ if (graph_properties.words.click != null ) {graph_properties.words.click(d);} if (graph_properties.corcordance != null) { graph_properties.corcordance(d.word); } })
 					.on('mouseover',function(d) { prev_col = d3.rgb(d3.select(this).attr("style")); d3.select(this).style("fill", graph_properties.words.outline_bg); })
 					.on('mouseout',function(d) { d3.select(this).style("fill", prev_col); });
 		};

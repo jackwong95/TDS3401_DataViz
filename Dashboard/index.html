@@ -247,33 +247,6 @@
 	    return {"width":width, "height":height};
 	}
 		
-	draw_multibarchart({"data":"../Data/sentiment_distribution.json", "show":20, "color":{"negative":"#B71C1C","positive":"#1B5E20"}, "order":"alpha_asc", "onclick":function(){}, 
-		"svg_id":"#multibar_graph_container", "size":get_empty_spaces("#multibar_graph_container"), "margin":{top:20, left:100, right:0, bottom:10}})
-	draw_multibarchart({"data":"../Data/sentiment_distribution.json", "show":20, "color":{"negative":"#B71C1C","positive":"#1B5E20"}, "order":"alpha_asc", "onclick":function(){}, 
-		"svg_id":"#fv_multibar_graph_container", "size":get_empty_spaces("#fv_multibar_graph_container"), "margin":{top:20, left:100, right:0, bottom:0}})
-	
-	function filterByCategory(category)
-	{
-		// when cateogry clicked this function will be called. do your stuf here
-		// category = imbd, amazon or yelp				
-		console.log("category");
-		console.log(category);
-	}
-	
-	function wordClicked(word)
-	{
-		console.log("word");
-		console.log(word);
-	}
-	
-	draw_wordcloud({"data":"../Data/frequency.csv", "svg_id":"#wc", "size":get_empty_spaces("#wc_container"), 
-	"color":["#FF6E40","#448AFF","#E040FB"], "margin":{top:0, left:0, right:0, bottom:0}, 
-	"legend_height_offset":30, "category":{outline_bg:"#FFFFFF", click:filterByCategory}, "words":{outline_bg:"#FFFFFF", click:wordClicked}})
-	
-	draw_wordcloud({"data":"../Data/bigger_frequency.csv", "svg_id":"#fv_wc", "size":get_empty_spaces("#fv_wc_container"), 
-	"color":["#FF6E40","#448AFF","#E040FB"], "margin":{top:0, left:0, right:0, bottom:0}, 
-	"legend_height_offset":30, "category":{outline_bg:"#FFFFFF", click:filterByCategory}, "words":{outline_bg:"#FFFFFF", click:wordClicked}})
-		
 	// Data.
 	var all;
 	var amazon;
@@ -314,17 +287,49 @@
 		
 				// Bind concordance.
 				concordance_func = concordance_integration;
-				
+				// graph_properties.axis_offset.x
 				// Bar.
+				draw_multibarchart({"data":"../Data/sentiment_distribution.json", "color":{"negative":"#B71C1C","positive":"#1B5E20"}, "order":"alpha_asc", "onclick":function(){}, 
+					"svg_id":"#multibar_graph_container", "size":get_empty_spaces("#multibar_graph_container"), "margin":{top:20, left:100, right:0, bottom:10}, "axis_offset":{x:-12, y:242}})
+				draw_multibarchart({"data":"../Data/sentiment_distribution.json", "color":{"negative":"#B71C1C","positive":"#1B5E20"}, "order":"alpha_asc", "onclick":function(){}, 
+					"svg_id":"#fv_multibar_graph_container", "size":get_empty_spaces("#fv_multibar_graph_container"), "margin":{top:20, left:100, right:0, bottom:30}, "axis_offset":{x:-17, y:660}})
 				
 				// Cloud.
+				draw_wordcloud({"data":"../Data/frequency.csv", "svg_id":"#wc", "size":get_empty_spaces("#wc_container"), 
+				"color":["#FF6E40","#448AFF","#E040FB"], "margin":{top:0, left:0, right:0, bottom:0}, 
+				"legend_height_offset":30, "category":{outline_bg:"#FFFFFF", click:filter_data}, "words":{outline_bg:"#FFFFFF", click:null}, 
+				"corcordance":concordance_func})
+				
+				draw_wordcloud({"data":"../Data/bigger_frequency.csv", "svg_id":"#fv_wc", "size":get_empty_spaces("#fv_wc_container"), 
+				"color":["#FF6E40","#448AFF","#E040FB"], "margin":{top:0, left:0, right:0, bottom:0}, 
+				"legend_height_offset":30, "category":{outline_bg:"#FFFFFF", click:filter_data}, "words":{outline_bg:"#FFFFFF", click:null}, 
+				"corcordance":concordance_func})
 				
 				// Bubble.
-				new Bubble("bubble_container", concordance_func);
-				new Bubble("fv_bubble_container", concordance_func);
+				var bubble = new Bubble("bubble_container", concordance_func);
+				var fv_bubble = new Bubble("fv_bubble_container", concordance_func);
 				
 				// Tree.
 				
+		
+				function filter_data(source_name)
+				{
+					if (source_name == "amazon")
+					{
+						bubble.update("Amazon");
+						fv_bubble.update("Amazon");
+					}
+					else if (source_name == "imbd")
+					{
+						bubble.update("IMDb");
+						fv_bubble.update("IMDb");
+					}
+					else
+					{
+						bubble.update("Yelp");
+						fv_bubble.update("Yelp");
+					}
+				}
 				
 				function concordance_integration(d) {
 					

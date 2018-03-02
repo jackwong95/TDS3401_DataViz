@@ -59,9 +59,10 @@ function draw_multibarchart(graph_properties)
 				.selectAll("polyline")
 				.remove();
 			
+			d3.select(graph_properties.svg_id)
+				.select(".nv-wrap .nv-axis")
+				.attr("transform", "translate("+ graph_properties.axis_offset.x + "," + graph_properties.axis_offset.y + ")");
 			return chart;
 		});
-		
-		// d3.select("#multibar_graph").select(".nv-wrap .nv-axis").attr("transform", "translate("+ -50 + "," + 0 + ")");
 	});
 }
