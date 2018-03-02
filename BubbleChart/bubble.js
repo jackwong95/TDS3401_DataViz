@@ -29,8 +29,10 @@ function bubble_pie_chart(div_id) {
 	// Filter.
 	var option = ["Amazon", "IMDb", "Yelp"];
 	var filter = container.append("div")
-		.style("margin", "1em")
-		.append("select");
+		.append("select")
+		.style("position", "absolute")
+		.style("display", "inline-block")
+		.style("margin", "5px");
 
 	filter.selectAll("option").remove();
 	filter.selectAll("option")
@@ -158,7 +160,11 @@ function bubble_pie_chart(div_id) {
 			.style("font-weight", "bold")
 			.selectAll("circle")
 				.style("stroke", "white")
-				.style("stroke-width", "5px");
+				.style("stroke-width", "1px");
+		
+		d3v4.select(this)
+			.selectAll("text")
+				.style("fill", "white");
 
 		// Tooltip.
 		tooltip.transition().duration(time)
@@ -186,6 +192,7 @@ function bubble_pie_chart(div_id) {
 	}
 
 	function onmousemove() {
+		
 		tooltip
 			.style("left", d3v4.event.pageX + 15 + "px")
 			.style("top", d3v4.event.pageY + 15 + "px");
@@ -199,6 +206,10 @@ function bubble_pie_chart(div_id) {
 			.style("font-weight", "normal")
 			.selectAll("circle")
 				.style("stroke-width", "0px");
+				
+		d3v4.select(this)
+			.selectAll("text")
+				.style("fill", "#222");
 
 		// Hide tooltip.
 		tooltip.transition().duration(time)
@@ -227,7 +238,7 @@ function bubble_pie_chart(div_id) {
 				.attr("fill", function(d, i) {
 					return pie_color(d.data["sentiment"]);
 				})
-				.attr("text-anchor", "middle")
+				.attr("text-anchor", "middlea")
 				.exit();
 
 		pie_chart.selectAll("text").remove();
