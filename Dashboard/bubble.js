@@ -195,7 +195,6 @@ class Bubble {
 		}
 
 		function onclick(d) {
-			console.log(d);
 			if (obj.click) {
 				obj.click(d.data["subject"]);
 			}
