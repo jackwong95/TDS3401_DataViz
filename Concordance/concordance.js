@@ -109,7 +109,7 @@ function concordance(text, data, sentence_access = null, text_color = null, page
 			var str = sentence_access(data[current]);
 
 			// Find text.
-			var n = str.search(text);
+			var n = str.toLowerCase().search(text.toLowerCase());
 
 			if (n === -1) {
 				continue;
