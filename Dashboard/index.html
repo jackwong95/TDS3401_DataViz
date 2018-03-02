@@ -311,7 +311,6 @@
 				var bubble = new Bubble("bubble_container", concordance_func);
 				var fv_bubble = new Bubble("fv_bubble_container", concordance_func);
 				
-				console.log(bubble.filter);
 				bubble.filter.on("change", function() { sync_change(this.value); });
 				fv_bubble.filter.on("change", function() { sync_change(this.value); });
 				

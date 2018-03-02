@@ -43,7 +43,8 @@ class Bubble {
 			.data(this.options).enter()
 			.append("option")
 				.attr("value", function(opt) { return opt;})
-				.text(function(opt) { return opt; });
+				.text(function(opt) { return opt; })
+				.on("change", function() { update(this.value); });
 
 		// Bubble.
 		this.svg = this.container.append("svg")
@@ -89,9 +90,7 @@ class Bubble {
 				obj.bubble_data[obj.options[2]] = d3;
 
 				obj.loaded = true;
-
 				obj.update(obj.options[0]);
-				obj.filter.on("change", function() { obj.update(this.value); });
 			});
 
 		// Data access.
@@ -210,7 +209,7 @@ class Bubble {
 				.selectAll("circle")
 					.style("stroke", "white")
 					.style("stroke-width", "1px");
-			
+
 			d3v4.select(this)
 				.selectAll("text")
 					.style("fill", "white");
