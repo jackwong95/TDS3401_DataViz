@@ -1,0 +1,14 @@
+.bubble div.tooltip p {
+	margin: 0;
+	font-size: 18px;
+	font-weight: bold;
+	color: #000000;
+	border-bottom: 1px solid #000000;
+	padding-bottom: 5px;
+	margin-bottom: 10px;
+}
+
+.bubble div.tooltip,
+.bubble g.node text {
+	font-family: 'Helvetica', Helvetica, Arial, sans-serif;
+}
