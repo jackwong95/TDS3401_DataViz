@@ -1,0 +1,14 @@
+{
+    "amazon": {
+        "negative": 500,
+        "positive": 500
+    },
+    "imbd": {
+        "negative": 362,
+        "positive": 386
+    },
+    "yelp": {
+        "negative": 500,
+        "positive": 500
+    }
+}

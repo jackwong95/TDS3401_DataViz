@@ -1,0 +1,10 @@
+TODO:
+2 word sphere
+1 change barchart to http://nvd3.org/examples/multiBar.html
+refactor code
+pre-process datasets for word sphere and barchart
+load real data to barchart & word sphere
+sort data by alphabetical order
+sort data by frequecny
+maximize number of bar shown
+select different dataset

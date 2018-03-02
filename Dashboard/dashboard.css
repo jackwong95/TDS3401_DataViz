@@ -50,35 +50,137 @@ table {
 body
 {
 	background-color: #eceff1;
+	overflow-x: hidden;
+	/*overflow-y: hidden;*/
+}
+
+#dashboard_container
+{
+	width: 1920px;
+	height: 3000px;
+	position: relative;
+	overflow: hidden;
+}
+
+.bg_image_container
+{
+	background-image: url(./background.jpg);
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	-webkit-filter: blur(70px);
+	-o-filter: blur(70px);
+	filter: blur(70px);
+	filter: progid: DXImageTransform.Microsoft.Blur(PixelRadius='70');
+	background-size: cover;
+}
+
+.blur
+{
+  /* All the background image supports */
+  background-image: -webkit-linear-gradient(bottom left, rgba(43, 40, 50, 0.8) 0  background-image: url(http://www.placekitten.com/1500/1500);
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  -webkit-filter: blur(70px);
+  -o-filter: blur(70px);
+  filter: blur(70px);
+  filter: progid: DXImageTransform.Microsoft.Blur(PixelRadius='70');
+  background-size: cover;%, rgba(83, 86, 99, 0.8) 45%, rgba(69, 77, 91, 0.6) 60%);
+  background-image: -moz-linear-gradient(bottom left, rgba(43, 40, 50, 0.8) 0%, rgba(83, 86, 99, 0.8) 45%, rgba(69, 77, 91, 0.6) 60%);
+  background-image: -o-linear-gradient(bottom left, rgba(43, 40, 50, 0.8) 0%, rgba(83, 86, 99, 0.8) 45%, rgba(69, 77, 91, 0.6) 60%);
+  background-image: linear-gradient(to top right, rgba(43, 40, 50, 0.8) 0%, rgba(83, 86, 99, 0.8) 45%, rgba(69, 77, 91, 0.6) 60%);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-filter: blur(50px);
+  -o-filter: blur(50px);
+  filter: blur(50px);
+  filter: progid: DXImageTransform.Microsoft.Blur(PixelRadius='70');
+  top: -70px;
+  right: -70px;
+  left: -70px;
+  padding: 70px;
+}
+
+.blur:after
+{
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 1001;
+  background-image: -webkit-linear-gradient(339deg, rgba(43, 40, 50, 0.8) 0%, rgba(43, 40, 50, 0.4) 46%, rgba(0, 0, 0, 0.05) 50%);
+  background-image: -moz-linear-gradient(339deg, rgba(43, 40, 50, 0.8) 0%, rgba(43, 40, 50, 0.4) 46%, rgba(0, 0, 0, 0.05) 50%);
+  background-image: -o-linear-gradient(339deg, rgba(43, 40, 50, 0.8) 0%, rgba(43, 40, 50, 0.4) 46%, rgba(0, 0, 0, 0.05) 50%);
+  background-image: linear-gradient(339deg, rgba(43, 40, 50, 0.8) 0%, rgba(43, 40, 50, 0.4) 46%, rgba(0, 0, 0, 0.05) 50%);
+  -webkit-filter: blur(70px);
+  -o-filter: blur(70px);
+  filter: progid: DXImageTransform.Microsoft.Blur(PixelRadius='70');
+  filter: blur(70px);
+}
+
+
+#dashboard_content_container
+{
+    position: relative;
 }
 
 #wc
 {
-	margin-left: 25px;
 	display: inline-block;
+}
+
+body
+{
+	cursor: default;
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently
+						  supported by Chrome and Opera */
 }
 
 #dashboard_header
 {
 	width: 100%;
 	height: 80px;
-	background-color: #37474f;
 	cursor: pointer;
+}
+
+#dashboard_header
+{
+	background-color: #212121;
+}
+
+.dashboard_text
+{
+	display: inline-block;
+}
+
+.dashboard_text
+{
+	font-family: 'Fira Sans Condensed', Arial;
+	letter-spacing: 1px;
+	color: #fff;
+}
+
+#dashboard_creator
+{
+	margin-left: 52px;
+	margin-top: 10px;
+	font-size: 13px;
+	color: #F5F5F5;
 }
 
 #dashboard_title
 {
 	font-weight: bold;
 	margin-left: 50px;
-	margin-top: 17px;
-	font-size: 40px;
-}
-
-#dashboard_creator
-{
-	margin-left: 10px;
-	margin-top: 20px;
-	font-size: 15px;
+	margin-top: 15px;
+	font-size: 25px;
 }
 
 #text_query
@@ -101,17 +203,16 @@ body
 	width: 70px;
 }
 
-.svg_div
+.chart_container
 {
 	float: left;
 	margin-top: 20px;
 	margin-left: 20px;
-	border: 1px solid #4f5b62;
 }
 
-#bar_div
+#mutlibar_chart_container
 {
-	width: 1490px;
+	width: 700px;
 	height: 350px;
 }
 
@@ -139,15 +240,15 @@ body
 #word_clouds
 {
 	height: 350px;
-	width: 350px;
+	width: 1140px;
 }
 
 .graph_header
 {
 	width: 100%;
-	border-bottom: 1px solid #4f5b52;
 	height: 50px;
-	background-color: #718792;
+	background-color: #757575;
+	opacity: 0.75;
 }
 
 .globe_text
@@ -162,19 +263,22 @@ body
 	margin-top: 15px;
 	margin-left: 15px;
 	display: inline-block;
-	font-family: 'Barlow', serif;
-	color: #fff;
+    font-family: 'Pontano Sans', sans-serif;
+	letter-spacing: 1px;
+	color: #ffffff;
 	font-size: 20px;
 }
 
-.dashboard_text
+.graph_container
 {
-	display: inline-block;
-	font-family: 'Barlow', serif;
-	color: #fff;
+	height: 85%;
+	width: 100%;
+	display: block;
+	background-color: #E0E0E0;
+	opacity: 0.95;
 }
 
-#barchart_query
+#multi_chart_query
 {
 	z-index: 1;
 	position: absolute;
@@ -191,12 +295,20 @@ body
 	shape-rendering: crispEdges;
 }
 
-.query_label
+.wc_text
 {
-	font-family: 'Barlow', serif;
-	font-size: 15px;
-	font-weight: bold;
+	font-size: 20px;
+	font: sans-serif;
+}
 
+.tick
+{
+	cursor: pointer;
+}
+
+.word
+{
+	cursor: pointer;
 }
 
 .axis path, .axis line
