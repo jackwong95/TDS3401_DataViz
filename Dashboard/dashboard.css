@@ -51,7 +51,7 @@ body
 {
 	background-color: #eceff1;
 	overflow-x: hidden;
-	/*overflow-y: hidden;*/
+	overflow-y: hidden;
 }
 
 #dashboard_container
@@ -64,7 +64,7 @@ body
 
 .bg_image_container
 {
-	background-image: url(./background.jpg);
+	background-image: url(./background_images/background4.jpg);
 	position: absolute;
 	height: 100%;
 	width: 100%;
@@ -78,7 +78,7 @@ body
 .blur
 {
   /* All the background image supports */
-  background-image: -webkit-linear-gradient(bottom left, rgba(43, 40, 50, 0.8) 0  background-image: url(http://www.placekitten.com/1500/1500);
+  background-image: -webkit-linear-gradient(bottom left, rgba(43, 40, 50, 0.8) 0  background-image: url(./background_images/background4.jpg);
   position: absolute;
   height: 100%;
   width: 100%;
@@ -157,6 +157,11 @@ body
 	height: 80px;
 }
 
+.category_spacer
+{
+	height: 120px;
+}
+
 #dashboard_header
 {
 	background-color: #212121;
@@ -164,14 +169,36 @@ body
 
 .dashboard_text
 {
-	display: inline-block;
-}
-
-.dashboard_text
-{
 	font-family: 'Fira Sans Condensed', Arial;
 	letter-spacing: 1px;
 	color: #fff;
+	display: inline-block;
+}
+
+#dashboard_header_container
+{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 1;
+	opacity: 1;
+}
+
+#dashboard_header_navigator
+{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 2;
+	opacity: 0;
+}
+
+#dashboard_header_navigator
+{
+	font-weight: bold;
+	margin-left: 50px;
+	margin-top: 23px;
+	font-size: 30px;
 }
 
 #dashboard_creator
@@ -206,26 +233,32 @@ body
 
 #fv_mutlibar_chart_container
 {
-	width: 500px;
-	height: 800px;
-}
-
-#fv_mutlibar_chart_container
-{
-	width: 500px;
-	height: 800px;
+	width: 700px;
+	height: 850px;
 }
 
 #fv_word_clouds
 {
 	width: 1140px;
-	height: 800px;
+	height: 850px;
+}
+
+#fv_bubble_chart
+{
+	width: 900px;
+	height: 850px;
+}
+
+#fv_wt_chart
+{
+	width: 900px;
+	height: 850px;
 }
 
 .category_container
 {
 	width: 100%;
-	height: 3000px;
+	height: 2000px;
 }
 
 .chart_container
@@ -272,8 +305,19 @@ body
 {
 	width: 100%;
 	height: 50px;
-	background-color: #757575;
+	background-color: #212121;
 	opacity: 0.75;
+	position:relative;
+}
+
+.graph_header_nav
+{
+	cursor: pointer;
+}
+
+.graph_header_nav:hover
+{
+	background-color: #E1F5FE;
 }
 
 .globe_text
@@ -283,7 +327,7 @@ body
 	font-size: 13px;
 }
 
-.header_text
+.header_text, .hover_text
 {
 	margin-top: 15px;
 	margin-left: 15px;
@@ -294,6 +338,27 @@ body
 	font-size: 20px;
 }
 
+.hover_text
+{
+	font-weight: bold;
+}
+
+.header_text
+{
+	z-index:1;
+	top: 0px;
+	position: absolute;
+}
+
+.hover_text
+{
+	z-index:2;
+	top: 0px;
+	position: absolute;
+	opacity: 0;
+	color: #000000;
+}
+
 .graph_container
 {
 	height: 85%;
@@ -301,23 +366,6 @@ body
 	display: block;
 	background-color: #E0E0E0;
 	opacity: 0.95;
-}
-
-#multi_chart_query
-{
-	z-index: 1;
-	position: absolute;
-	top: 225px;
-	left: 1400px;
-}
-
-#svg_barchart
-{
-	position: absolute;
-	top: 150px;
-	left: 50px;
-	font: 12px sans-serif;
-	shape-rendering: crispEdges;
 }
 
 .wc_text

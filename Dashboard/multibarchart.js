@@ -7,32 +7,24 @@ function draw_multibarchart(graph_properties)
 	d3.json(graph_properties.data, function(error, data)
 	{
 		if (error) throw error;
-		sentiment[0].values.push({"label":"amazon", "value":data.amazon.negative});
-		sentiment[0].values.push({"label":"yelp", "value":data.yelp.negative});
-		sentiment[0].values.push({"label":"imbd", "value":data.imbd.negative}); 
+		sentiment[0].values.push({"label":"amazon", "value":-data.amazon.negative});
+		sentiment[0].values.push({"label":"yelp", "value":-data.yelp.negative});
+		sentiment[0].values.push({"label":"imbd", "value":-data.imbd.negative}); 
 		sentiment[1].values.push({"label":"amazon", "value":data.amazon.positive});
 		sentiment[1].values.push({"label":"yelp", "value":data.yelp.positive});
 		sentiment[1].values.push({"label":"imbd", "value":data.imbd.positive}); //["label":"amazon", "value":data.amazon.negative]
 		// facebook multi chart
 		var chart;
 		nv.addGraph(function() {
-			chart = nv.models.multiBarHorizontalChart()
+			chart = nv.models.discreteBarChart()
 				.x(function(d) { return d.label })
 				.y(function(d) { return d.value })
-				.yErr(function(d) { return [-Math.abs(d.value * Math.random() * 0.3), Math.abs(d.value * Math.random() * 0.3)] })
 				.duration(250)
-				.showControls(false)
-				.showLegend(false)
-				.legendPosition("right")
-				.controlsPosition("bottom")
 				.margin(graph_properties.margin)
-				.showYAxis(true)
-				.showXAxis(true)
-				.stacked(true)
 				.width(graph_properties.size.width - graph_properties.margin.left - graph_properties.margin.right)
 				.height(graph_properties.size.height - graph_properties.margin.top - graph_properties.margin.bottom)
 				.color(function(d){
-					if (d.key=="negative")
+					if (d.series==0)
 					{
 						return graph_properties.color.negative;
 					}
@@ -67,8 +59,9 @@ function draw_multibarchart(graph_properties)
 				.selectAll("polyline")
 				.remove();
 			
-
 			return chart;
 		});
+		
+		// d3.select("#multibar_graph").select(".nv-wrap .nv-axis").attr("transform", "translate("+ -50 + "," + 0 + ")");
 	});
 }

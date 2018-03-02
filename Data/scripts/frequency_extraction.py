@@ -20,7 +20,7 @@ dict = {'amazon':{}, 'imbd':{}, 'yelp':{}}
 punctuation_removal = str.maketrans(' ', ' ', string.punctuation)
 
 # thres, how many words need to at least be present, to be output in a frequency dictionary
-def get_freq_dict(df, thres = 10):
+def get_freq_dict(df, thres = 8):
 	temp = {}
 
 	# iterate through each row
@@ -54,13 +54,13 @@ dict['amazon'] = get_freq_dict(amazon)
 dict['imbd'] = get_freq_dict(imbd)
 dict['yelp'] = get_freq_dict(yelp)
 
-with open('../frequency.json', 'w') as outfile:
+with open('../bigger_frequency.json', 'w') as outfile:
     json.dump(dict, outfile, sort_keys=True, indent='\t')
 
 print(json.dumps(dict, indent=4, sort_keys=True))
 
 #output in csv format
-file = codecs.open("../frequency.csv", "w", "utf-8")
+file = codecs.open("../bigger_frequency.csv", "w", "utf-8")
 file.write("word,source\n")
 
 for key in dict:
