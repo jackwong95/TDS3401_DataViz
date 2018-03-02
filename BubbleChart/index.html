@@ -8,12 +8,12 @@
 		<div>Topic Bubble Chart</div>
 	</div>
 
-	<script src="//d3js.org/d3.v4.min.js"></script>
+	<script src="d3v4.js"></script>
 	<script>
 
-		bubble_pie_chart("bubble");
-
 		"use strict";
+
+		bubble_pie_chart("bubble");
 
 		function bubble_pie_chart(div_id) {
 
@@ -24,10 +24,10 @@
 			var SELECT_CLASS  = div_id + "_select";
 
 			// Container.
-			var container = d3.select("#" + div_id);
+			var container = d3v4.select("#" + div_id);
 			var width     = parseInt(container.style("width"));
 			var height    = parseInt(container.style("height"));
-			var color     = d3.scaleOrdinal(d3.schemeCategory20c);
+			var color     = d3v4.scaleOrdinal(d3v4.schemeCategory20c);
 			var time      = 200;
 			var opaque    = 0.6;
 
@@ -35,10 +35,10 @@
 			var pie_width  = width * 0.3;
 			var pie_height = height * 0.3;
 			var pie_radius = Math.min(pie_width, pie_height) / 2.0;
-			var pie_color = d3.scaleOrdinal()
+			var pie_color = d3v4.scaleOrdinal()
 				.domain(["positive", "negative"])
-				.range(["green", "red"]);
-			var pie = d3.pie()
+				.range(["#11AA00", "#C70039"]);
+			var pie = d3v4.pie()
 				.value(function(d) {
 					return d["count"];
 				})
@@ -54,7 +54,8 @@
 				.style("margin", "1em")
 				.append("select");
 
-			filter.selectAll("." + SELECT_CLASS)
+			filter.selectAll("option").remove();
+			filter.selectAll("option")
 				.data(option).enter()
 				.append("option")
 					.attr("class", SELECT_CLASS)
@@ -72,13 +73,13 @@
 				.style("height", height + "px");
 
 			// Tooltip.
-			var tooltip = d3.select("body").append("div")
+			var tooltip = container.append("div")
 				.attr("class", TOOLTIP_CLASS)
-				.style("opacity", 0.0);
+				.style("opacity", 0.0)
+				.style("position", "absolute");
 
 			// Pie.
 			var pie_chart = tooltip.append("svg")
-				.attr("class", "TEST")
 				.attr("width", pie_width)
 				.attr("height", pie_height)
 				.append("g")
@@ -88,7 +89,7 @@
 				.attr("width", 75)
 				.attr("height", pie_height);
 
-			var arc = d3.arc()
+			var arc = d3v4.arc()
 				.innerRadius(0)
 				.outerRadius(pie_radius);
 
@@ -96,10 +97,10 @@
 			var bubble_data = {};
 
 			// Asynchronous load and wait.
-			d3.queue()
-				.defer(d3.json, "Data/amazon_bubble.json")
-				.defer(d3.json, "Data/imdb_bubble.json")
-				.defer(d3.json, "Data/yelp_bubble.json")
+			d3v4.queue()
+				.defer(d3v4.json, "Data/amazon_bubble.json")
+				.defer(d3v4.json, "Data/imdb_bubble.json")
+				.defer(d3v4.json, "Data/yelp_bubble.json")
 				.await(function(error, amazon, imdb, yelp) {
 					if (error) throw error;
 
@@ -120,15 +121,15 @@
 					if (selection == option[o]) {
 
 						// Data hierarchy.
-						var root = d3.hierarchy({"children": bubble_data[option[o]]})
+						var root = d3v4.hierarchy({"children": bubble_data[option[o]]})
 							.sum(function(d) { return d["count"]; })
 							.sort(function(a, b) { return b["count"] - a["count"]; });
 
 						// Pack chart.
-						d3.pack().size([width, height]).padding(2.0)(root);
+						d3v4.pack().size([width, height]).padding(2.0)(root);
 
 						// Nodes.
-						svg.selectAll("." + NODE_CLASS).remove()
+						svg.selectAll("." + NODE_CLASS).remove();
 						var node = svg.selectAll("." + NODE_CLASS)
 							.data(root.children).enter()
 							.append("g")
@@ -136,16 +137,15 @@
 								.attr("transform", function(d) {
 									return "translate(" + d.x + "," + d.y + ")";
 								})
-								.style("opacity", opaque);
-
-						node.append("title")
-							.text(function(d) {
-								return d.data["subject"] + ": " + d3.format(",d")(d.value);
-							});
+								.style("opacity", opaque)
+								.on("mouseover", onmouseover)
+								.on("mousemove", onmousemove)
+								.on("mouseout", onmouseout)
+								.on("click", onclick);
 
 						// Circle.
 						node.append("circle")
-							.transition().duration(time)
+							// .transition().duration(time) // Looks disgusting.
 							.attr("r", function(d) { return d.r; })
 							.style("fill", function(d) {
 								return color(d.data["subject"]);
@@ -159,12 +159,9 @@
 							})
 							.style("font-size", "0.75em")
 							.style("text-anchor", "middle")
-							.style("fill", "#222");
-
-						// Nodes' events.
-						node.on("mouseover", onmouseover)
-							.on("mouseout", onmouseout)
-							.on("click", onclick);
+							.style("font-family", "Arial")
+							.style("fill", "#222")
+							.style("pointer-events", "none");
 
 						break;
 					}
@@ -174,25 +171,28 @@
 			function onmouseover(d) {
 
 				// Change node's style.
-				d3.select(this)
+				d3v4.select(this)
 					.style("opacity", 1.0)
-					.style("font-weight", "bold");
+					.style("font-weight", "bold")
+					.selectAll("circle")
+						.style("stroke", "#00FF00")
+						.style("stroke-width", "1px");
 
 				// Tooltip.
 				tooltip.transition().duration(time)
-					.style("opacity", 1.0)
-					.style("position", "absolute")
-					.style("left", d3.event.pageX + 30 + "px")
-					.style("top", d3.event.pageY + "px");
+					.style("opacity", 1.0);
 
 				// Current selection.
 				var selection = filter.property("value");
 				for (var o = 0; o < option.length; o ++) {
 					if (selection == option[o]) {
 
-						tooltip.selectAll("p").remove();
+						tooltip.selectAll("p")
+							.remove();
+
 						tooltip.insert("p", "svg")
 							.html("Sentiment Distribution for " + d.data["subject"]);
+
 						draw_pie(bubble_data[option[o]], d.data["subject"]);
 
 						break;
@@ -200,12 +200,20 @@
 				}
 			}
 
+			function onmousemove() {
+				tooltip
+					.style("left", d3v4.event.pageX + 15 + "px")
+					.style("top", d3v4.event.pageY + 15 + "px");
+			}
+
 			function onmouseout() {
 
 				// Reset node's style.
-				d3.select(this)
+				d3v4.select(this)
 					.style("opacity", opaque)
-					.style("font-weight", "normal");
+					.style("font-weight", "normal")
+					.selectAll("circle")
+						.style("stroke-width", "0px");
 
 				// Hide tooltip.
 				tooltip.transition().duration(time)
@@ -227,9 +235,7 @@
 				}
 
 				pie_chart.selectAll("path").remove();
-				pie_chart.selectAll("text").remove();
-
-				var path = pie_chart.selectAll("path")
+				pie_chart.selectAll("path")
 					.data(pie(pie_data["sentiments"])).enter()
 					.append("path")
 						.attr("d", arc)
@@ -239,7 +245,8 @@
 						.attr("text-anchor", "middle")
 						.exit();
 
-				var text_path = pie_chart.selectAll("text")
+				pie_chart.selectAll("text").remove();
+				pie_chart.selectAll("text")
 					.data(pie(pie_data["sentiments"])).enter()
 					.append("text")
 						.attr("transform", function(d) {
