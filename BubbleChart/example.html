@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html>
 <body>
-	<div id="bubble" style="height: 400px; width: 400px;">
-	</div>
+	<div id="a" style="height: 400px; width: 400px;"></div>
+	<div id="b" style="height: 800px; width: 800px;"></div>
 
 	<script src="d3v4.js"></script>
 	<script src="bubble.js"></script>
 	<script>
 
-		bubble_pie_chart("bubble");
+		var a = new Bubble("a");
+		setTimeout(function() { a.update("Yelp"); }, 1000); // Due to asynchronous data loading.
+
+		var b = new Bubble("b");
+		setTimeout(function() { b.update("IMDb"); }, 1000); // Due to asynchronous data loading.
 
 	</script>
 
