@@ -31,6 +31,15 @@ class Tree {
 		this.r1        = 4;
 		this.r2        = 6;
 
+		// Bar style.
+		this.bar_width  = this.width * 0.3;
+		this.bar_height = this.height * 0.3;
+		this.bar_color  = d3.scale.ordinal().domain(["positive", "negative"]).range(["#11AA00", "#C70039"]);
+		this.bar_margin = {"top": 10, "right": 10, "bottom": 20, "left": 25};
+		
+		this.bar_width  -= (this.bar_margin.left + this.bar_margin.right);
+		this.bar_height  -= (this.bar_margin.top + this.bar_margin.bottom);
+
 		// Tree
 		this.i      = 0;
 		this.root   = null;
@@ -54,6 +63,39 @@ class Tree {
 			.append("option")
 				.attr("value", function(opt) { return opt;})
 				.text(function(opt) { return opt; });
+
+		// Tooltip.
+		this.tooltip = this.container.append("div")
+			.attr("class", "tooltip")
+			.style("opacity", 0.0)
+			.style("position", "absolute")
+			.style("background-color", "white")
+			.style("text-align", "center")
+			.style("text-align", "center")
+			.style("padding", "10px")
+			.style("font-family", this.font)
+			.style("pointer-events", "none")
+			.style("box-shadow", "0px 0px 8px 0px black");
+
+		// Bar.
+		this.bar_chart = this.tooltip.append("svg")
+			.attr("width", this.bar_width + this.bar_margin.left + this.bar_margin.right)
+			.attr("height", this.bar_height + this.bar_margin.top + this.bar_margin.bottom)
+			.append("g")
+				.attr("transform", "translate(" + this.bar_margin.left + "," + this.bar_margin.top + ")");
+
+		// Axis and scale.
+		this.bar_x = d3.scale.ordinal().rangeRoundBands([0, this.bar_width], 0.05);
+		this.bar_y = d3.scale.linear().range([this.bar_height, 0]);
+
+		this.bar_xAxis = d3.svg.axis()
+			.scale(this.bar_x)
+			.orient("bottom");
+
+		this.bar_yAxis = d3.svg.axis()
+			.scale(this.bar_y)
+			.orient("left")
+			.ticks(5);
 
 		// Tree.
 		this.tree = d3.layout.tree()
@@ -149,7 +191,10 @@ class Tree {
 						n.selectAll("circle").style("r", obj.r1);
 						n.selectAll("text").style("font-weight", "normal");
 					})
-					.on("click", click);
+					.on("click", click)
+					.on("mouseover", onmouseover)
+					.on("mousemove", onmousemove)
+					.on("mouseout", onmouseout);
 
 				nodeEnter.append("circle")
 					.attr("r", obj.r1)
@@ -161,7 +206,7 @@ class Tree {
 					.attr("x", 10)
 					.attr("dy", 0)
 					.attr("text-anchor", "start")
-					.text(function(d) { return d.name; })
+					.text(function(d) { return (d.name == "root") ? selection : d.name; })
 					.style("font-family", obj.font)
 					.style("font-size", "12px")
 					.style("opacity", 0.0);
@@ -228,6 +273,79 @@ class Tree {
 				d.children = [d._children, d._children = d.children][0];
 				update_tree(d);
 			}
+		}
+
+		function onmouseover(d) {
+
+			// Tooltip.
+			obj.tooltip.transition().duration(obj.time)
+				.style("opacity", 1.0);
+
+			obj.tooltip.selectAll("p")
+				.remove();
+
+			obj.tooltip.insert("p", "svg")
+				.html("Sentiment Distribution for " + d.name);
+
+			obj.tooltip.selectAll("p")
+				.style("margin", "0px 6px 12px 6px");
+
+			draw_bar([
+				{"sentiment": "positive", "value": d.sentiment[1]},
+				{"sentiment": "negative", "value": d.sentiment[0]}
+			]);
+		}
+
+		function onmousemove() {
+
+			// Move tooltip.
+			obj.tooltip
+				.style("left", d3.event.pageX + 15 + "px")
+				.style("top", d3.event.pageY + 15 + "px");
+		}
+
+		function onmouseout() {
+
+			// Hide tooltip.
+			obj.tooltip.transition().duration(obj.time)
+				.style("opacity", 0.0);
+		}
+
+		function draw_bar(sentiment_data) {
+
+			obj.bar_x.domain(sentiment_data.map(function(d) { return d.sentiment; }));
+			obj.bar_y.domain([0, d3.max(sentiment_data, function(d) { return d.value; })]);
+
+			obj.bar_chart.html("");
+
+			obj.bar_chart.append("g")
+				.attr("class", "axis")
+				.attr("transform", "translate(0," + obj.bar_height + ")")
+				.style("font-family", obj.font)
+				.call(obj.bar_xAxis)
+				.selectAll("text")
+					.style("text-anchor", "end")
+					.attr("dx", "14px")
+					.attr("dy", "5px");
+
+			obj.bar_chart.append("g")
+				.attr("class", "axis")
+				.call(obj.bar_yAxis);
+
+			obj.bar_chart.selectAll(".axis")
+				.style("font-size", "8px")
+				.selectAll("path, line")
+					.style("fill", "none")
+					.style("shape-rendering", "crispEdges");
+
+			obj.bar_chart.selectAll("rect")
+				.data(sentiment_data)
+				.enter().append("rect")
+					.style("fill", function(d) { return obj.bar_color(d.sentiment); })
+					.attr("x", function(d) { return obj.bar_x(d.sentiment); })
+					.attr("width", obj.bar_x.rangeBand())
+					.attr("y", function(d) { return obj.bar_y(d.value); })
+					.attr("height", function(d) { return obj.bar_height - obj.bar_y(d.value); });
 		}
 	}
 }
