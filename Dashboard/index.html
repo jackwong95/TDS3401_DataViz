@@ -138,7 +138,7 @@
 	<script>
 
 		$(document).ready(function() {
-			$("html, body").animate({ scrollTop: 0 }, 1000);
+			$("html, body").animate({ scrollTop: 0 }, 5000);
 		});
 
 	</script>
@@ -158,8 +158,7 @@
 	
 	<!-- Tree -->
 	<script src="tree.js"></script>
-	
-	
+
 	<script>
 		"use strict";
 		
@@ -282,8 +281,8 @@
 						30, 3, concordance_func, {"category_clicked":sync_change, "word_clicked":null});
 					
 					// Bubble.
-					var bubble = new Bubble("bubble_container", concordance_func);
-					var fv_bubble = new Bubble("fv_bubble_container", concordance_func);
+					var bubble = new Bubble("bubble_container", concordance_func, ["Amazon", "IMDb", "Yelp"], ["Data/amazon_bubble.json", "Data/imdb_bubble.json", "Data/yelp_bubble.json"]);
+					var fv_bubble = new Bubble("fv_bubble_container", concordance_func, ["Amazon", "IMDb", "Yelp"], ["Data/amazon_bubble.json", "Data/imdb_bubble.json", "Data/yelp_bubble.json"]);
 					bubble.filter.on("change", function() { sync_change(this.value); });
 					fv_bubble.filter.on("change", function() { sync_change(this.value); });
 
@@ -292,7 +291,7 @@
 					var fv_tree = new Tree("fv_tree_container", ["Amazon", "IMDb", "Yelp"], ["Data/amazon_tree.json", "Data/imdb_tree.json", "Data/yelp_tree.json"]);
 					tree.filter.on("change", function() { sync_change(this.value); });
 					fv_tree.filter.on("change", function() { sync_change(this.value); });
-					
+
 					// Sync Controls.
 					function sync_change(selection) {
 						current_source = selection;
