@@ -32,9 +32,10 @@ class WordCloud {
 			this.word_hover_col = word_hover_col;
 			this.corcordance = corcordance;
 			
+			this.min_max = [];
+			this.selected_min_max = [];
 			this.raw_data = [];
 			this.selected_data = [];
-			
 			// Data.
 			var obj = this;
 			
@@ -45,22 +46,37 @@ class WordCloud {
 				.await(function(error, d1, d2, d3) {
 					if (error) throw error;
 					
-					obj.raw_data[name[0]] = process(d1);
-					obj.raw_data[name[1]] = process(d2);
-					obj.raw_data[name[2]] = process(d3);
+					var p1 = process(d1);
+					var p2 = process(d2);
+					var p3 = process(d3);
+					
+					obj.min_max[name[0]] = [p1.min, p1.max];
+					obj.min_max[name[1]] = [p2.min, p2.max];
+					obj.min_max[name[2]] = [p3.min, p3.max];
+					
+					obj.raw_data[name[0]] = p1.data;
+					obj.raw_data[name[1]] = p2.data;
+					obj.raw_data[name[2]] = p3.data;
 					
 					function process(raw_data)
 					{
+						var min = Number.MAX_VALUE;
+						var max = Number.MIN_VALUE;
+						
 						var temp = [];
 						for (var key in raw_data)
 						{
 							if (raw_data[key].source == null || raw_data[key].word == null
 								|| raw_data[key].freq == null)
 								continue;
+							var temp_freq = parseInt(raw_data[key].freq);
 							
-							temp.push({source:raw_data[key].source, word:raw_data[key].word, freq:parseInt(raw_data[key].freq)});
+							min = Math.min(temp_freq, min);
+							max = Math.max(temp_freq, max);
+							
+							temp.push({source:raw_data[key].source, word:raw_data[key].word, freq:temp_freq});
 						}
-						return temp;
+						return {"data":temp, "min":min, "max":max};
 					}
 				
 					obj.update_wordcloud("Amazon");
@@ -70,6 +86,8 @@ class WordCloud {
 		
 		update_wordcloud(selection)
 		{
+			this.selected_min_max = this.min_max[selection];
+			
 			this.selected_data = [];
 			
 			// threshold here
@@ -83,9 +101,6 @@ class WordCloud {
 				this.selected_data.push(entry);
 			}
 			
-			console.log(this.threshold);
-			console.log(this.raw_data);
-			console.log(this.selected_data);
 			draw_wordcloud(this);
 		}
 }
@@ -98,7 +113,7 @@ function draw_wordcloud(wc_inst)
 		.remove();
 
 	var color = {'amazon':wc_inst.color[0], 'yelp':wc_inst.color[1], 'imdb':wc_inst.color[2]};
-	var fontSize = d3.scale.pow().exponent(5).domain([0,1]).range([10,80]);
+	var fontSize = d3.scale.pow().exponent(5).domain([wc_inst.selected_min_max[0], wc_inst.selected_min_max[1]]).range([10,80]);
 
 	var layout = d3.layout.cloud()
 		.timeInterval(10)
@@ -106,7 +121,7 @@ function draw_wordcloud(wc_inst)
 		.words(wc_inst.selected_data)
 		.rotate(function(d) { return 0; })
 		.font('monospace')
-		.fontSize(function(d,i) { return fontSize(Math.random()); })
+		.fontSize(function(d,i) { return fontSize(d.freq); })
 		.text(function(d) { return d.word; })
 		.spiral("archimedean")
 		.on("end", draw)

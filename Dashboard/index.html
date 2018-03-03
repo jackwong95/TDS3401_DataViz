@@ -276,9 +276,9 @@
 					var fv_wc_sz = get_empty_spaces("#fv_wc_container");
 					
 					var wc_instance = new WordCloud("#wc", wc_sz.width, 
-						wc_sz.height, 30, 10, concordance_func, {"category_clicked":sync_change, "word_clicked":null});
+						wc_sz.height, 30, 4, concordance_func, {"category_clicked":sync_change, "word_clicked":null});
 					var fv_wc_instance = new WordCloud("#fv_wc", fv_wc_sz.width, fv_wc_sz.height, 
-						30, 3, concordance_func, {"category_clicked":sync_change, "word_clicked":null});
+						30, 1, concordance_func, {"category_clicked":sync_change, "word_clicked":null});
 					
 					// Bubble.
 					var bubble = new Bubble("bubble_container", concordance_func, ["Amazon", "IMDb", "Yelp"], ["Data/amazon_bubble.json", "Data/imdb_bubble.json", "Data/yelp_bubble.json"]);
