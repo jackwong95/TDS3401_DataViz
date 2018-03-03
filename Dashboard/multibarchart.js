@@ -50,7 +50,7 @@ function draw_multibarchart(graph_properties)
 			// change font
 			d3.selectAll(".nv-x .nv-axis").selectAll(".tick")
 				.selectAll("text")
-				.attr("style", "text-anchor: end; font-size:0.8em");
+				.attr("style", "text-anchor: end; font-size:0.8em; font-style:'Helvetica', Helvetica, Arial, sans-serif;");
 			
 			// remove the qq plot
 			d3.selectAll(".nv-bar")

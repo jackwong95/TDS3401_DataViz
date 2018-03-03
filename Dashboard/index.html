@@ -44,7 +44,7 @@
 						<svg id="multibar_graph"></svg>
 					</div>
 				</div>
-
+				
 				<!-- Cloud -->
 				<div id="word_clouds" class="chart_container">
 					<div class="graph_header graph_header_nav" onclick="navigate_to_section('category_1')" onmouseover="graph_header_mouseover('wc_header', 'wc_cat')" onmouseleave="reset_graph_header()">
@@ -72,7 +72,7 @@
 						<div id="wt_header" class="header_text"><a>Word Tree</a></div>
 						<div id="wt_cat" class="hover_text"><a>View Word Tree in Fullscreen</a></div>
 					</div>
-					<div id="tree-container"></div>
+					<div id="tree_container" class="graph_container"></div>
 				</div>
 			</div>
 			
@@ -99,6 +99,7 @@
 						<svg id="fv_wc"></svg>
 					</div>
 				</div>
+				
 			</div>
 			
 			<!-- Page 2 -->
@@ -128,6 +129,7 @@
 	</div>
 
 	<!-- Imports -->
+	<script src="http://d3js.org/queue.v1.min.js"></script>
 	<script src="Ext/d3v3.min.js" charset="utf-8"></script>
 	<script src="Ext/d3v4.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -148,25 +150,37 @@
 	<script src="multibarchart.js"></script>
 	
 	<!-- Cloud -->
-
+	<script src="d3cloud.js"></script>
+	<script src="wordcloud.js"></script>
 	
 	<!-- Bubble -->
 	<script src="bubble.js"></script>
 	
 	<!-- Tree -->
+	<script src="tree.js"></script>
 	
 	
 	<script>
 		"use strict";
-
+		
+		var current_header = null;
+		var current_category = null;
+		
+		function graph_header_mouseover(header_id, category_id) {
+			current_header = document.getElementById(header_id);
+			current_category = document.getElementById(category_id);
+			current_header.style.opacity = 0.0;
+			current_category.style.opacity = 1.0;
+		}
+		
 		var current_view_category = "#category_overview";
-
+		
 		function dashboard_mouseover(container, navigator) {
 			if (current_view_category != "#category_overview") {
 				graph_header_mouseover(container, navigator);
 			}
 		}
-
+		
 		function reset_graph_header() {
 			if (current_header != null) {
 				current_header.style.opacity = 1;
@@ -178,16 +192,6 @@
 
 			current_header = null;
 			current_category = null;
-		}
-
-		var current_header = null;
-		var current_category = null;
-			
-		function graph_header_mouseover(header_id, category_id) {
-			current_header = document.getElementById(header_id);
-			current_category = document.getElementById(category_id);
-			current_header.style.opacity = 0.0;
-			current_category.style.opacity = 1.0;
 		}
 
 		function navigate_to_section(category) {
@@ -260,14 +264,23 @@
 					concordance_func = concordance_integration;
 
 					// Bar.
-					draw_multibarchart({"data":"Data/bar.json", "color":{"negative":"#B71C1C","positive":"#1B5E20"}, "order":"alpha_asc", "onclick":function(){}, 
-						"svg_id":"#multibar_graph_container", "size":get_empty_spaces("#multibar_graph_container"), "margin":{top:20, left:100, right:0, bottom:10}, "axis_offset":{x:-12, y:242}})
-					draw_multibarchart({"data":"Data/bar.json", "color":{"negative":"#B71C1C","positive":"#1B5E20"}, "order":"alpha_asc", "onclick":function(){}, 
-						"svg_id":"#fv_multibar_graph_container", "size":get_empty_spaces("#fv_multibar_graph_container"), "margin":{top:20, left:100, right:0, bottom:30}, "axis_offset":{x:-17, y:660}})
+					draw_multibarchart({"data":"Data/bar.json", "color":{"negative":"#B71C1C","positive":"#1B5E20"}, 
+						"svg_id":"#multibar_graph_container", "size":get_empty_spaces("#multibar_graph_container"), 
+						"margin":{top:30, left:80, right:0, bottom:10}, "axis_offset":{x:-23, y:242}});
+					draw_multibarchart({"data":"Data/bar.json", "color":{"negative":"#B71C1C","positive":"#1B5E20"}, 
+						"svg_id":"#fv_multibar_graph_container", "size":get_empty_spaces("#fv_multibar_graph_container"), 
+						"margin":{top:20, left:100, right:0, bottom:30}, "axis_offset":{x:-8, y:660}});
 
 					// Cloud.
 
-
+					var wc_sz = get_empty_spaces("#wc_container");
+					var fv_wc_sz = get_empty_spaces("#fv_wc_container");
+					
+					var wc_instance = new WordCloud("#wc", wc_sz.width, 
+						wc_sz.height, 30, 10, concordance_func, {"category_clicked":sync_change, "word_clicked":null});
+					var fv_wc_instance = new WordCloud("#fv_wc", fv_wc_sz.width, fv_wc_sz.height, 
+						30, 3, concordance_func, {"category_clicked":sync_change, "word_clicked":null});
+					
 					// Bubble.
 					var bubble = new Bubble("bubble_container", concordance_func);
 					var fv_bubble = new Bubble("fv_bubble_container", concordance_func);
@@ -275,13 +288,20 @@
 					fv_bubble.filter.on("change", function() { sync_change(this.value); });
 
 					// Tree.
-
-
+					var tree = new Tree("tree_container", ["Amazon", "IMDb", "Yelp"], ["Data/amazon_tree.json", "Data/imdb_tree.json", "Data/yelp_tree.json"]);
+					var fv_tree = new Tree("fv_tree_container", ["Amazon", "IMDb", "Yelp"], ["Data/amazon_tree.json", "Data/imdb_tree.json", "Data/yelp_tree.json"]);
+					tree.filter.on("change", function() { sync_change(this.value); });
+					fv_tree.filter.on("change", function() { sync_change(this.value); });
+					
 					// Sync Controls.
 					function sync_change(selection) {
 						current_source = selection;
+						wc_instance.update_wordcloud(selection);
+						fv_wc_instance.update_wordcloud(selection);
 						bubble.update(selection);
 						fv_bubble.update(selection);
+						tree.update(selection);
+						fv_tree.update(selection);
 					}
 
 					function concordance_integration(d) {
@@ -292,7 +312,7 @@
 							function(d) { return (d.sentiment) ? "#11AA00" : "#C70039"; }, // sentiment color.
 							50 // page size.
 						);
-
+						
 						function sel(selection) {
 							if (selection == "Amazon") {
 								return amazon;

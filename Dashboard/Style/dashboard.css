@@ -152,6 +152,17 @@ body
 	z-index: 10;
 }
 
+a
+{
+	color: #fff;
+}
+
+a:hover
+{
+	color: #fff;
+	text-decoration: none;
+}
+
 .header_spacer
 {
 	height: 80px;
@@ -191,10 +202,6 @@ body
 	left: 0px;
 	z-index: 2;
 	opacity: 0;
-}
-
-#dashboard_header_navigator
-{
 	font-weight: bold;
 	margin-left: 50px;
 	margin-top: 23px;
@@ -217,20 +224,6 @@ body
 	font-size: 25px;
 }
 
-#text_query
-{
-	width: 70px;
-	margin-top: 5px;
-	margin-bottom: 10px;
-}
-
-#bar_count
-{
-	width: 70px;
-	margin-top: 5px;
-	margin-bottom: 10px;
-}
-
 #fv_mutlibar_chart_container
 {
 	width: 700px;
@@ -239,7 +232,7 @@ body
 
 #fv_word_clouds
 {
-	width: 1140px;
+	width: 1160px;
 	height: 850px;
 }
 
@@ -251,7 +244,7 @@ body
 
 #fv_wt_chart
 {
-	width: 900px;
+	width: 960px;
 	height: 850px;
 }
 
@@ -270,8 +263,14 @@ body
 
 #mutlibar_chart_container
 {
-	width: 700px;
+	width: 800px;
 	height: 350px;
+}
+
+#word_clouds
+{
+	height: 350px;
+	width: 1040px;
 }
 
 #bubble_div
@@ -295,12 +294,6 @@ body
 	overflow: auto;
 }
 
-#word_clouds
-{
-	height: 350px;
-	width: 1140px;
-}
-
 .graph_header
 {
 	width: 100%;
@@ -320,13 +313,6 @@ body
 	background-color: #E1F5FE;
 }
 
-.globe_text
-{
-	font-family: 'Barlow', serif;
-	font-weight: bold;
-	font-size: 13px;
-}
-
 .header_text, .hover_text
 {
 	margin-top: 15px;
@@ -334,13 +320,21 @@ body
 	display: inline-block;
     font-family: 'Pontano Sans', sans-serif;
 	letter-spacing: 1px;
-	color: #ffffff;
 	font-size: 20px;
 }
 
 .hover_text
 {
 	font-weight: bold;
+	z-index:2;
+	top: 0px;
+	position: absolute;
+	opacity: 0;
+}
+
+.hover_text a
+{
+	color: #337ab7;
 }
 
 .header_text
@@ -348,15 +342,6 @@ body
 	z-index:1;
 	top: 0px;
 	position: absolute;
-}
-
-.hover_text
-{
-	z-index:2;
-	top: 0px;
-	position: absolute;
-	opacity: 0;
-	color: #000000;
 }
 
 .graph_container
@@ -372,16 +357,6 @@ body
 {
 	font-size: 20px;
 	font: sans-serif;
-}
-
-.tick
-{
-	cursor: pointer;
-}
-
-.word
-{
-	cursor: pointer;
 }
 
 .axis path, .axis line

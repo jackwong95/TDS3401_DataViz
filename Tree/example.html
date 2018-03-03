@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<div id="a" style="height: 400px; width: 400px;"></div>
+
+	<script src="http://d3js.org/queue.v1.min.js"></script>
+	<script src="https://d3js.org/d3.v3.min.js"></script>
+	<script src="tree.js"></script>
+	<script>
+
+		"use strict";
+
+		var a = new Tree("a");
+		setTimeout(function() { a.update("Yelp"); }, 2000); // Due to asynchronous data loading.
+
+	</script>
+
+</body>
+</html>
