@@ -1,6 +1,7 @@
 /**
  * @brief	Bubble	Creates a bubble and pie chart (requires a specific data format).
  * @param	div_id	ID of the containing div.
+ * @param	onclick	On click event.
  * @param	name	Options.
  * @param	file	Data files location.
  */
@@ -64,7 +65,6 @@ class Bubble {
 			.style("opacity", 0.0)
 			.style("position", "absolute")
 			.style("background-color", "white")
-			.style("text-align", "center")
 			.style("text-align", "center")
 			.style("padding", "10px")
 			.style("font-family", this.font)

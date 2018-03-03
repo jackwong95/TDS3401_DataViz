@@ -71,7 +71,6 @@ class Tree {
 			.style("position", "absolute")
 			.style("background-color", "white")
 			.style("text-align", "center")
-			.style("text-align", "center")
 			.style("padding", "10px")
 			.style("font-family", this.font)
 			.style("pointer-events", "none")
@@ -285,7 +284,7 @@ class Tree {
 				.remove();
 
 			obj.tooltip.insert("p", "svg")
-				.html("Sentiment Distribution for " + d.name);
+				.html("Sentiment Distribution for " + (d.name == "root") ? selection : d.name);
 
 			obj.tooltip.selectAll("p")
 				.style("margin", "0px 6px 12px 6px");
