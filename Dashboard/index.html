@@ -72,7 +72,7 @@
 						<div id="wt_header" class="header_text"><a>Word Tree</a></div>
 						<div id="wt_cat" class="hover_text"><a>View Word Tree in Fullscreen</a></div>
 					</div>
-					<div id="tree-container"></div>
+					<div id="tree_container" class="graph_container"></div>
 				</div>
 			</div>
 			
@@ -128,6 +128,7 @@
 	</div>
 
 	<!-- Imports -->
+	<script src="http://d3js.org/queue.v1.min.js"></script>
 	<script src="Ext/d3v3.min.js" charset="utf-8"></script>
 	<script src="Ext/d3v4.js"></script>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -136,7 +137,7 @@
 	<script>
 
 		$(document).ready(function() {
-			$("html, body").animate({ scrollTop: 0 }, 1000);
+			$("html, body").animate({ scrollTop: 0 }, 5000);
 		});
 
 	</script>
@@ -154,7 +155,7 @@
 	<script src="bubble.js"></script>
 	
 	<!-- Tree -->
-	
+	<script src="tree.js"></script>
 	
 	<script>
 		"use strict";
@@ -269,19 +270,24 @@
 
 
 					// Bubble.
-					var bubble = new Bubble("bubble_container", concordance_func);
-					var fv_bubble = new Bubble("fv_bubble_container", concordance_func);
+					var bubble = new Bubble("bubble_container", concordance_func, ["Amazon", "IMDb", "Yelp"], ["Data/amazon_bubble.json", "Data/imdb_bubble.json", "Data/yelp_bubble.json"]);
+					var fv_bubble = new Bubble("fv_bubble_container", concordance_func, ["Amazon", "IMDb", "Yelp"], ["Data/amazon_bubble.json", "Data/imdb_bubble.json", "Data/yelp_bubble.json"]);
 					bubble.filter.on("change", function() { sync_change(this.value); });
 					fv_bubble.filter.on("change", function() { sync_change(this.value); });
 
 					// Tree.
-
+					var tree = new Tree("tree_container", ["Amazon", "IMDb", "Yelp"], ["Data/amazon_tree.json", "Data/imdb_tree.json", "Data/yelp_tree.json"]);
+					var fv_tree = new Tree("fv_tree_container", ["Amazon", "IMDb", "Yelp"], ["Data/amazon_tree.json", "Data/imdb_tree.json", "Data/yelp_tree.json"]);
+					tree.filter.on("change", function() { sync_change(this.value); });
+					fv_tree.filter.on("change", function() { sync_change(this.value); });
 
 					// Sync Controls.
 					function sync_change(selection) {
 						current_source = selection;
 						bubble.update(selection);
 						fv_bubble.update(selection);
+						tree.update(selection);
+						fv_tree.update(selection);
 					}
 
 					function concordance_integration(d) {

@@ -1,6 +1,7 @@
 /**
  * @brief	Bubble	Creates a bubble and pie chart (requires a specific data format).
  * @param	div_id	ID of the containing div.
+ * @param	onclick	On click event.
  * @param	name	Options.
  * @param	file	Data files location.
  */
