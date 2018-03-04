@@ -136,7 +136,7 @@
 	<script>
 
 		$(document).ready(function() {
-			$("html, body").animate({ scrollTop: 0 }, 5000);
+			$("#dashboard_container").animate({ scrollTop: 0 }, 5000);
 		});
 
 	</script>
@@ -195,7 +195,7 @@
 			reset_graph_header();
 			current_view_category = "#" + category;
 			var animation_duration = 2000;
-			$('html, body').animate({
+			$('#dashboard_container').animate({
 				scrollTop: $(current_view_category).offset().top
 			}, animation_duration);
 		}

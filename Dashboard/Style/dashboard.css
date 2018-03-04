@@ -57,7 +57,7 @@ body
 #dashboard_container
 {
 	width: 1920px;
-	height: 100%;
+	height: 960px;
 	position: relative;
 	overflow: hidden;
 }
@@ -145,7 +145,7 @@ body
 
 #dashboard_header
 {
-	width: 100%;
+	width: 1920px;
 	height: 80px;
     position: fixed;
 	cursor: pointer;
