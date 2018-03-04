@@ -1,66 +1,171 @@
-function draw_multibarchart(graph_properties)
-{
-	var sentiment = [{key:'negative', values:[]}, {key:'positive', values:[]}];
+
+class Bar {
 	
-	d3.json(graph_properties.data, function(error, data)
-	{
-		if (error) throw error;
-		sentiment[0].values.push({"label":"amazon", "value":-data.amazon.negative});
-		sentiment[0].values.push({"label":"yelp", "value":-data.yelp.negative});
-		sentiment[0].values.push({"label":"imbd", "value":-data.imbd.negative}); 
-		sentiment[1].values.push({"label":"amazon", "value":data.amazon.positive});
-		sentiment[1].values.push({"label":"yelp", "value":data.yelp.positive});
-		sentiment[1].values.push({"label":"imbd", "value":data.imbd.positive}); //["label":"amazon", "value":data.amazon.negative]
-		// facebook multi chart
-		var chart;
-		nv.addGraph(function() {
-			chart = nv.models.discreteBarChart()
-				.x(function(d) { return d.label })
-				.y(function(d) { return d.value })
-				.duration(250)
-				.margin(graph_properties.margin)
-				.width(graph_properties.size.width - graph_properties.margin.left - graph_properties.margin.right)
-				.height(graph_properties.size.height - graph_properties.margin.top - graph_properties.margin.bottom)
-				.color(function(d){
-					if (d.series==0)
-					{
-						return graph_properties.color.negative;
-					}
-					return graph_properties.color.positive;
-				});
-
-			chart.yAxis.tickFormat(function(d) {
-				return Math.abs(d).toFixed(0).toString();
-			});
-
-			chart.legend.dispatch.legendClick = function(d, i)
+	constructor(
+		div_id,
+		width, height, 
+		margin={"top":0, "left":0, "right":0, "bottom":0},
+		name=["Amazon", "IMDb", "Yelp"],
+		color={"negative":"#B71C1C","positive":"#1B5E20"},
+		file="Data/bar.json"
+		) {
+			
+			this.div_id = div_id;
+			this.width = width;
+			this.height = height;
+			this.animation_duration = 2000;
+			this.margin = margin;
+			this.color = color;
+			this.file = file;
+			this.name = name;
+			this.data = [];
+			
+			// Data.
+			var obj = this;
+			
+			d3.json(this.file, function(error, data)
 			{
-				// remove the qq plot
-				d3.selectAll(".nv-bar")
-					.selectAll("polyline")
-					.remove();
-			};
+				if (error) throw error;
 
-			d3.select(graph_properties.svg_id+' svg')
-				.datum(sentiment)
-				.call(chart);
+				obj.data.push({"name":"Amazon", "negative":data.amazon.negative, "positive":data.amazon.positive});
+				obj.data.push({"name":"IMDb", "negative":data.imbd.negative, "positive":data.imbd.positive});
+				obj.data.push({"name":"Yelp", "negative":data.yelp.negative, "positive":data.yelp.positive});
+				
+				obj.width = obj.width - obj.margin.left - obj.margin.right;
+				obj.height = obj.height - obj.margin.top - obj.margin.bottom;
+				
+				obj.draw_bar();
+			});
+				
+		}
+		
+		draw_bar()
+		{
+			var svg = d3.select(this.div_id)
+				.attr("width", this.width + this.margin.left + this.margin.right)
+				.attr("height", this.height + this.margin.top + this.margin.bottom)
+				.append("g")
+				.attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+			
+			var obj = this;
+			
+			// Transpose the data into layers
+			var dataset = d3.layout.stack()(['negative', 'positive'].map(function(sent) {
+				return obj.data.map(function(data) {
+					return {x: data.name, y: +data[sent]};
+				});
+			}));
+			
+			// Set x, y and colors
+			var x = d3.scale.ordinal()
+				.domain(dataset[0].map(function(d) { return d.x; }))
+				.rangeRoundBands([10, this.width-10], 0.25);
 
-			nv.utils.windowResize(chart.update);
+			var y = d3.scale.linear()
+				.domain([0, d3.max(dataset, function(d) {  return d3.max(d, function(d) { return d.y0 + d.y; });  })])
+				.range([this.height, 0]);
 			
-			// change font
-			d3.selectAll(".nv-x .nv-axis").selectAll(".tick")
-				.selectAll("text")
-				.attr("style", "text-anchor: end; font-size:0.8em; font-style:'Helvetica', Helvetica, Arial, sans-serif;");
+			// Define and draw axes
+			var yAxis = d3.svg.axis()
+				.scale(y)
+				.orient("left")
+				.ticks(2)
+				.tickSize(-this.width, 0, 0)
+				.tickFormat( function(d) { return d } );
+
+			var xAxis = d3.svg.axis()
+				.scale(x)
+				.orient("bottom")
+				.tickFormat(function(d) { return d } );
 			
-			// remove the qq plot
-			d3.selectAll(".nv-bar")
-				.selectAll("polyline")
+			svg.append("g")
+				.attr("class", "y axis")
+				.call(yAxis);
+
+			svg.append("g")
+				.attr("class", "x axis")
+				.attr("transform", "translate(0," + this.height + ")")
+				.call(xAxis);
+				
+			var colors = [obj.color.negative, obj.color.positive];
+				
+			// Create groups for each series, rects for each segment 
+			var groups = svg.selectAll("g.cost")
+				.data(dataset)
+				.enter().append("g")
+				.attr("class", "cost")
+				.style("fill", function(d, i) { return colors[i]; });
+
+			var rect = groups.selectAll("rect")
+				.data(function(d) { return d; })
+				.enter()
+				.append("rect")
+				.on("mouseover", function() { tooltip.style("display", null); })
+				.on("mouseout", function() { tooltip.style("display", "none"); })
+				.on("mousemove", function(d) {
+					var xPosition = d3.mouse(this)[0] - 15;
+					var yPosition = d3.mouse(this)[1] - 25;
+					tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+					tooltip.select("text").text(d.y);
+				})
+				.style("opacity", 0.0)
+				.attr("y", 0)
+				.attr("x", function(d) { return x(d.x); })
+				.attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); })
+				.attr("width", x.rangeBand())
+					.transition().duration(obj.animation_duration)
+				.style("opacity", 1.0)
+				.attr("y", function(d) { return y(d.y0 + d.y); });
+				
+				// Draw legend
+				var legend = svg.selectAll(".legend")
+					.data(colors)
+					.enter().append("g")
+					.attr("class", "legend")
+					.attr("transform", function(d, i) { return "translate(30," + i * 19 + ")"; });
+
+				legend.append("rect")
+					.attr("x", obj.width - 18)
+					.attr("width", 18)
+					.attr("height", 18)
+					.style("fill", function(d, i) {return colors.slice().reverse()[i];});
+
+				legend.append("text")
+					.attr("x", obj.width + 5)
+					.attr("y", 9)
+					.attr("dy", ".35em")
+					.style("font-family", "'Helvetica', Helvetica, Arial, sans-serif")
+					.style("text-anchor", "start")
+					.text(function(d, i) { 
+						switch (i) {
+							  case 0: return "Amazon";
+							  case 1: return "IMDb";
+							  case 2: return "Yelp";
+						}
+					});
+
+
+				// Prep the tooltip bits, initial display is hidden
+				var tooltip = svg.append("g")
+					.attr("class", "tooltip")
+					.style("display", "none");
+
+				tooltip.append("rect")
+					.attr("width", 30)
+					.attr("height", 20)
+					.attr("fill", "white")
+					.style("opacity", 0.5);
+
+				tooltip.append("text")
+					.attr("x", 15)
+					.attr("dy", "1.2em")
+					.style("text-anchor", "middle")
+					.attr("font-size", "12px")
+					.attr("font-weight", "bold");
+				
+			d3.select(this.div_id)
+				.select(".x")
+				.selectAll("line")
 				.remove();
-			
-			d3.select(graph_properties.svg_id)
-				.select(".nv-wrap .nv-axis")
-				.attr("transform", "translate("+ graph_properties.axis_offset.x + "," + graph_properties.axis_offset.y + ")");
-			return chart;
-		});
-	});
+		}
 }

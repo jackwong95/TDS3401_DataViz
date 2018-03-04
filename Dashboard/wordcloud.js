@@ -1,9 +1,4 @@
-/**
- * @brief	ListView	Creates a collapsable list view
- * @param	div_id	ID of the containing div.
- * @param	name	Options.
- * @param	file	Data files location.
- */
+
 class WordCloud {
 	
 	constructor(
