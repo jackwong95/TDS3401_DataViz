@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Text with Jack</title>
+
+	<link href="https://fonts.googleapis.com/css?family=Fira+Sans+Condensed|Pontano+Sans" rel="stylesheet"> 
+	<link rel="stylesheet" type="text/css" href="Style/dashboard.css">
+	<link rel="stylesheet" type="text/css" href="Style/concordance.css">
+</head>
+
+<body>
+	<div id="dashboard_container">
+		<div class="bg_image_container"></div>
+		<div class="blur"> </div>
+		
+		<div id="dashboard_content_container">
+			
+			<!-- Header -->
+			<div id="dashboard_header" onclick="dashboard_header_clicked()"; onmouseover="dashboard_mouseover('dashboard_header_container', 'dashboard_header_navigator')" onmouseleave="reset_graph_header()">
+				<div id ="dashboard_header_container">
+					<div id="dashboard_title" class="dashboard_text"><a>Text with Jack</a></div>
+					<br>
+					<div id="dashboard_creator" class="dashboard_text"><a>A Dashboard by Choe Choon Ho and Wong Tiong Kiat</a></div>
+				</div>
+				<div id ="dashboard_header_navigator" class="dashboard_text">
+					<a>View Dashboard Overview In Fullscreen</a>
+				</div>
+			</div>
+			
+			<!-- Overview -->
+			<div id="category_overview" class="category_container">
+				<div class="header_spacer"></div>
+
+				<!-- Bar -->
+				<div id="mutlibar_chart_container" class="chart_container">
+					<div class="graph_header graph_header_nav" onclick="navigate_to_section('category_1')" onmouseover="graph_header_mouseover('bar_header', 'bar_cat')" onmouseleave="reset_graph_header()">
+						<div id="bar_header" class="header_text"><a>Distribution of Sentiment by Words</a></div>
+						<div id="bar_cat" class="hover_text"><a>View Barchart in Fullscreen</a></div>
+					</div>
+					<div id="multibar_graph_container" class="graph_container">
+						<svg id="multibar_graph"></svg>
+					</div>
+				</div>
+				
+				<!-- Cloud -->
+				<div id="word_clouds" class="chart_container">
+					<div class="graph_header graph_header_nav" onclick="navigate_to_section('category_1')" onmouseover="graph_header_mouseover('wc_header', 'wc_cat')" onmouseleave="reset_graph_header()">
+						<div id="wc_header" class="header_text"><a>Word Cloud</a></div>
+						<div id="wc_cat" class="hover_text"><a>View Word Cloud in Fullscreen</a></div>
+					</div>
+					<div id="wc_container" class="graph_container">
+						<svg id="wc"></svg>
+					</div>
+				</div>
+
+				<!-- Bubble -->
+				<div id="bubble_div" class="chart_container">
+					<div class="graph_header graph_header_nav" onclick="navigate_to_section('category_2')" onmouseover="graph_header_mouseover('bc_header', 'bc_cat')" onmouseleave="reset_graph_header()">
+						<div id="bc_header" class="header_text"><a>Bubble Chart</a></div>
+						<div id="bc_cat" class="hover_text"><a>View Bubble Chart in Fullscreen</a></div>
+					</div>
+					<div id="bubble_container" class="graph_container">
+					</div>
+				</div>
+
+				<!-- Tree -->
+				<div id="wt_container" class="chart_container">
+					<div class="graph_header graph_header_nav" onclick="navigate_to_section('category_2')" onmouseover="graph_header_mouseover('wt_header', 'wt_cat')" onmouseleave="reset_graph_header()">
+						<div id="wt_header" class="header_text"><a>Word Tree</a></div>
+						<div id="wt_cat" class="hover_text"><a>View Word Tree in Fullscreen</a></div>
+					</div>
+					<div id="tree_container" class="graph_container"></div>
+				</div>
+			</div>
+			
+			<!-- Page 1 -->
+			<div id="category_1" class="category_container">
+				<div class="category_spacer"></div>
+
+				<!-- Bar -->
+				<div id="fv_mutlibar_chart_container" class="chart_container">
+					<div class="graph_header">
+						<span><a class="header_text">Distribution of Sentiment by Words</a></span>
+					</div>
+					<div id="fv_multibar_graph_container" class="graph_container">
+						<svg id="fv_multibar_graph"></svg>
+					</div>
+				</div>
+
+				<!-- Cloud -->
+				<div id="fv_word_clouds" class="chart_container">
+					<div class="graph_header">
+						<span><a class="header_text">Word Cloud</a></span>
+					</div>
+					<div id="fv_wc_container" class="graph_container">
+						<svg id="fv_wc"></svg>
+					</div>
+				</div>
+				
+			</div>
+			
+			<!-- Page 2 -->
+			<div id="category_2" class="category_container">
+				<div class="category_spacer"></div>
+
+				<!-- Bubble -->
+				<div id="fv_bubble_chart" class="chart_container">
+					<div class="graph_header">
+						<span><a class="header_text">Bubble Chart</a></span>
+					</div>
+					<div id="fv_bubble_container" class="graph_container">
+					</div>
+				</div>
+
+				<!-- Tree -->
+				<div id="fv_wt_chart" class="chart_container">
+					<div class="graph_header">
+						<span><a class="header_text">Word Tree</a></span>
+					</div>
+					<div id="fv_tree_container" class="graph_container">
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Imports -->
+	<script src="http://d3js.org/queue.v1.min.js"></script>
+	<script src="Ext/d3v3.min.js" charset="utf-8"></script>
+	<script src="Ext/d3v4.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+	<script>
+
+		$(document).ready(function() {
+			$("#dashboard_container").animate({ scrollTop: 0 }, 5000);
+		});
+
+	</script>
+	
+	<!-- Concordance -->
+	<script src="concordance.js"></script>
+	
+	<!-- Bar -->
+	<script src="multibarchart.js"></script>
+	
+	<!-- Cloud -->
+	<script src="d3cloud.js"></script>
+	<script src="wordcloud.js"></script>
+	
+	<!-- Bubble -->
+	<script src="bubble.js"></script>
+	
+	<!-- Tree -->
+	<script src="tree.js"></script>
+
+	<script>
+		"use strict";
+		
+		var current_header = null;
+		var current_category = null;
+		
+		function graph_header_mouseover(header_id, category_id) {
+			current_header = document.getElementById(header_id);
+			current_category = document.getElementById(category_id);
+			current_header.style.opacity = 0.0;
+			current_category.style.opacity = 1.0;
+		}
+		
+		var current_view_category = "#category_overview";
+		
+		function dashboard_mouseover(container, navigator) {
+			if (current_view_category != "#category_overview") {
+				graph_header_mouseover(container, navigator);
+			}
+		}
+		
+		function reset_graph_header() {
+			if (current_header != null) {
+				current_header.style.opacity = 1;
+			}
+
+			if (current_category != null) {
+				current_category.style.opacity = 0;
+			}
+
+			current_header = null;
+			current_category = null;
+		}
+
+		function navigate_to_section(category) {
+			reset_graph_header();
+			current_view_category = "#" + category;
+			var animation_duration = 2000;
+			$('#dashboard_container').animate({
+				scrollTop: $(current_view_category).offset().top
+			}, animation_duration);
+		}
+
+		function dashboard_header_clicked() {
+			if (current_view_category == "#category_overview") {
+				window.open('https://github.com/jackwong95/TDS3401_DataViz', '_blank');
+			}
+			else {
+				navigate_to_section("category_overview")
+			}
+		}
+
+		function get_empty_spaces(graph_id) {
+			var width = $(graph_id).width();
+			var height = $(graph_id).height();
+			return {"width": width, "height": height};
+		}
+
+		// Data.
+		var all;
+		var amazon;
+		var imdb;
+		var yelp;
+		var current_source;
+
+		// Concordance function.
+		var concordance_func;
+
+		// Load data.
+		d3v4.queue()
+			.defer(d3v4.tsv, "Data/amazon.tsv")
+			.defer(d3v4.tsv,"Data/imdb.tsv" )
+			.defer(d3v4.tsv, "Data/yelp.tsv")
+			.await(function(error, d1, d2, d3) {
+				if (error) throw error;
+
+				amazon = d1;
+				imdb = d2;
+				yelp = d3;
+
+				process(amazon);
+				process(imdb);
+				process(yelp);
+
+				function process(data) {
+					for (var i = 0; i < data.length; i ++) {
+						data[i]["sentiment"] = +data[i]["sentiment"];
+					}
+				}
+
+				all = amazon.concat(imdb).concat(yelp);
+
+				// Load dashboard.
+				data_loaded();
+
+				function data_loaded() {
+
+					// Default source.
+					current_source = "Amazon";
+
+					// Bind concordance.
+					concordance_func = concordance_integration;
+
+					// Bar.
+					var bar_sz = get_empty_spaces("#multibar_graph_container");
+					var fv_bar_sz = get_empty_spaces("#fv_multibar_graph_container");
+					
+					var bar_instance = new Bar("#multibar_graph", bar_sz.width, bar_sz.height,
+					{"right":100, "left":50, "top":20, "bottom":35});
+					var fv_bar_instance = new Bar("#fv_multibar_graph", fv_bar_sz.width, fv_bar_sz.height,
+					{"right":100, "left":50, "top":130, "bottom":130});
+
+					// Cloud.
+
+					var wc_sz = get_empty_spaces("#wc_container");
+					var fv_wc_sz = get_empty_spaces("#fv_wc_container");
+					
+					var wc_instance = new WordCloud("#wc", wc_sz.width, 
+						wc_sz.height, 30, 4, concordance_func, {"category_clicked":sync_change, "word_clicked":null});
+					var fv_wc_instance = new WordCloud("#fv_wc", fv_wc_sz.width, fv_wc_sz.height, 
+						30, 1, concordance_func, {"category_clicked":sync_change, "word_clicked":null});
+					
+					// Bubble.
+					var bubble = new Bubble("bubble_container", concordance_func, ["Amazon", "IMDb", "Yelp"], ["Data/amazon_bubble.json", "Data/imdb_bubble.json", "Data/yelp_bubble.json"]);
+					var fv_bubble = new Bubble("fv_bubble_container", concordance_func, ["Amazon", "IMDb", "Yelp"], ["Data/amazon_bubble.json", "Data/imdb_bubble.json", "Data/yelp_bubble.json"]);
+					bubble.filter.on("change", function() { sync_change(this.value); });
+					fv_bubble.filter.on("change", function() { sync_change(this.value); });
+
+					// Tree.
+					var tree = new Tree("tree_container", ["Amazon", "IMDb", "Yelp"], ["Data/amazon_tree.json", "Data/imdb_tree.json", "Data/yelp_tree.json"]);
+					var fv_tree = new Tree("fv_tree_container", ["Amazon", "IMDb", "Yelp"], ["Data/amazon_tree.json", "Data/imdb_tree.json", "Data/yelp_tree.json"]);
+					tree.filter.on("change", function() { sync_change(this.value); });
+					fv_tree.filter.on("change", function() { sync_change(this.value); });
+
+					// Sync Controls.
+					function sync_change(selection) {
+						current_source = selection;
+						wc_instance.update_wordcloud(selection);
+						fv_wc_instance.update_wordcloud(selection);
+						bubble.update(selection);
+						fv_bubble.update(selection);
+						tree.update(selection);
+						fv_tree.update(selection);
+					}
+
+					function concordance_integration(d) {
+						concordance(
+							" " + d + " ", // word.
+							sel(current_source), // data.
+							function(d) { return d.review; }, // sentence.
+							function(d) { return (d.sentiment) ? "#11AA00" : "#C70039"; }, // sentiment color.
+							50 // page size.
+						);
+						
+						function sel(selection) {
+							if (selection == "Amazon") {
+								return amazon;
+							}
+							else if (selection == "IMDb") {
+								return imdb;
+							}
+							else if (selection == "Yelp") {
+								return yelp;
+							}
+							else if (selection == "all") {
+								return all;
+							}
+							else {
+								throw "Invalid selection";
+							}
+						}
+					}
+				}
+			});
+
+	</script>
+	
+</body>
+</html>
