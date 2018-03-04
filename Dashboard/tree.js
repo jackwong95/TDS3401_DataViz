@@ -28,8 +28,6 @@ class Tree {
 		this.time      = 1000;
 		this.opaque    = 0.6;
 		this.font      = "'Helvetica', Helvetica, Arial, sans-serif";
-		this.r1        = 4;
-		this.r2        = 6;
 
 		// Bar style.
 		this.bar_width  = this.width * 0.3;
@@ -41,10 +39,14 @@ class Tree {
 		this.bar_height  -= (this.bar_margin.top + this.bar_margin.bottom);
 
 		// Tree
-		this.i      = 0;
-		this.root   = null;
-		this.radius = Math.min(this.width - this.margin.left - this.margin.right, this.height - this.margin.top - this.margin.bottom) / 2.0;
-		this.length = this.radius / 3.0;
+		this.i            = 0;
+		this.root         = null;
+		this.radius       = Math.min(this.width - this.margin.left - this.margin.right, this.height - this.margin.top - this.margin.bottom) / 2.0;
+		this.length       = this.radius / 2.5;
+		this.node_radius  = this.length * 0.4;
+		this.node_stroke1 = "1px";
+		this.node_stroke2 = "3px";
+		this.font_size    = "14px";
 
 		// Filter.
 		var obj = this;
@@ -180,26 +182,16 @@ class Tree {
 				var nodeEnter = node.enter().append("g")
 					.attr("class", "node")
 					.style("cursor", "pointer")
-					.on("mouseover", function() {
-						var n = d3.select(this);
-						n.selectAll("circle").style("r", obj.r2);
-						n.selectAll("text").style("font-weight", "bold");
-					})
-					.on("mouseout", function() {
-						var n = d3.select(this);
-						n.selectAll("circle").style("r", obj.r1);
-						n.selectAll("text").style("font-weight", "normal");
-					})
 					.on("click", click)
 					.on("mouseover", onmouseover)
 					.on("mousemove", onmousemove)
 					.on("mouseout", onmouseout);
 
 				nodeEnter.append("circle")
-					.attr("r", obj.r1)
+					.attr("r", function(d) { return node_radius(d); })
 					.style("fill", function(d) { return (d._children) ? "lightsteelblue" : "#fff"; })
 					.style("stroke", "steelblue")
-					.style("stroke-width", "1px");
+					.style("stroke-width", obj.node_stroke1);
 
 				nodeEnter.append("text")
 					.attr("x", 10)
@@ -207,7 +199,7 @@ class Tree {
 					.attr("text-anchor", "start")
 					.text(function(d) { return (d.name == "root") ? selection : d.name; })
 					.style("font-family", obj.font)
-					.style("font-size", "12px")
+					.style("font-size", obj.font_size)
 					.style("opacity", 0.0);
 
 				// Node movement.
@@ -222,12 +214,6 @@ class Tree {
 
 				// Nove exit.
 				var nodeExit = node.exit().remove();
-
-				nodeExit.select("circle")
-					.attr("r", obj.r1);
-
-				nodeExit.select("text")
-					.style("fill-opacity", 0.0);
 
 				var link = obj.svg.selectAll("path.link")
 					.data(links, function(d) { return d.target.id; });
@@ -260,6 +246,10 @@ class Tree {
 				});
 			}
 
+			function node_radius(d) {
+				return (d.sentiment[0] + d.sentiment[1]) / (obj.root.sentiment[0] + obj.root.sentiment[1]) * obj.node_radius;
+			}
+
 			function collapse(d) {
 				if (d.children) {
 					d._children = d.children;
@@ -276,6 +266,15 @@ class Tree {
 
 		function onmouseover(d) {
 
+			// Node.
+			var n = d3.select(this);
+
+			n.selectAll("circle")
+				.style("stroke-width", obj.node_stroke2);
+
+			n.selectAll("text")
+				.style("font-weight", "bold");
+
 			// Tooltip.
 			obj.tooltip.transition().duration(obj.time)
 				.style("opacity", 1.0);
@@ -284,7 +283,7 @@ class Tree {
 				.remove();
 
 			obj.tooltip.insert("p", "svg")
-				.html("Sentiment Distribution for " + (d.name == "root") ? selection : d.name);
+				.html("Sentiment Distribution for " + ((d.name == "root") ? selection : d.name));
 
 			obj.tooltip.selectAll("p")
 				.style("margin", "0px 6px 12px 6px");
@@ -305,7 +304,16 @@ class Tree {
 
 		function onmouseout() {
 
-			// Hide tooltip.
+			// Node.
+			var n = d3.select(this);
+
+			n.selectAll("circle")
+				.style("stroke-width", obj.node_stroke1);
+
+			n.selectAll("text")
+				.style("font-weight", "normal");
+
+			// Tooltip.
 			obj.tooltip.transition().duration(obj.time)
 				.style("opacity", 0.0);
 		}
