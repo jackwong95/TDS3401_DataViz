@@ -8,4 +8,5 @@ Data Visualization for dataset https://archive.ics.uci.edu/ml/datasets/Sentiment
 Link for git pages
 
 > [Smaller Resolution Dashboard](https://jackwong95.github.io/TDS3401_DataViz/900%20x%20900%20Dashboard/)
+
 > [Larger Resolution Dashboard](https://jackwong95.github.io/TDS3401_DataViz/Dashboard/)
