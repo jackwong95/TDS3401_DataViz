@@ -1,0 +1,281 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* Dashboard style */
+body {
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+/* Background image */
+.bg_image_container {
+	background-image: url(background.jpg);
+	background-repeat: repeat-y;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	-webkit-filter: blur(70px);
+	-o-filter: blur(70px);
+	filter: blur(70px);
+	filter: progid: DXImageTransform.Microsoft.Blur(PixelRadius='70');
+	background-size: cover;
+}
+.blur {
+	/* All the background image supports */
+	background-image: -webkit-linear-gradient(bottom left, rgba(43, 40, 50, 0.8) 0  background-image: url(background.jpg);
+	background-repeat: repeat-y;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	-webkit-filter: blur(70px);
+	-o-filter: blur(70px);
+	filter: blur(70px);
+	filter: progid: DXImageTransform.Microsoft.Blur(PixelRadius='70');
+	background-size: cover;%, rgba(83, 86, 99, 0.8) 45%, rgba(69, 77, 91, 0.6) 60%);
+	background-image: -moz-linear-gradient(bottom left, rgba(43, 40, 50, 0.8) 0%, rgba(83, 86, 99, 0.8) 45%, rgba(69, 77, 91, 0.6) 60%);
+	background-image: -o-linear-gradient(bottom left, rgba(43, 40, 50, 0.8) 0%, rgba(83, 86, 99, 0.8) 45%, rgba(69, 77, 91, 0.6) 60%);
+	background-image: linear-gradient(to top right, rgba(43, 40, 50, 0.8) 0%, rgba(83, 86, 99, 0.8) 45%, rgba(69, 77, 91, 0.6) 60%);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	-webkit-filter: blur(50px);
+	-o-filter: blur(50px);
+	filter: blur(50px);
+	filter: progid: DXImageTransform.Microsoft.Blur(PixelRadius='70');
+	top: -70px;
+	right: -70px;
+	left: -70px;
+	padding: 70px;
+}
+.blur:after {
+	content: '';
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	z-index: 1001;
+	background-image: -webkit-linear-gradient(339deg, rgba(43, 40, 50, 0.8) 0%, rgba(43, 40, 50, 0.4) 46%, rgba(0, 0, 0, 0.05) 50%);
+	background-image: -moz-linear-gradient(339deg, rgba(43, 40, 50, 0.8) 0%, rgba(43, 40, 50, 0.4) 46%, rgba(0, 0, 0, 0.05) 50%);
+	background-image: -o-linear-gradient(339deg, rgba(43, 40, 50, 0.8) 0%, rgba(43, 40, 50, 0.4) 46%, rgba(0, 0, 0, 0.05) 50%);
+	background-image: linear-gradient(339deg, rgba(43, 40, 50, 0.8) 0%, rgba(43, 40, 50, 0.4) 46%, rgba(0, 0, 0, 0.05) 50%);
+	-webkit-filter: blur(70px);
+	-o-filter: blur(70px);
+	filter: progid: DXImageTransform.Microsoft.Blur(PixelRadius='70');
+	filter: blur(70px);
+}
+
+/* Header */
+#dashboard_header {
+	width: 100%;
+	height: 65px;
+	background-color: #212121;
+    position: fixed;
+	cursor: pointer;
+	z-index: 10;
+}
+.header_spacer {
+	height: 65px;
+}
+.category_spacer {
+	height: 400px;
+}
+#dashboard_header_container {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 1;
+	opacity: 1;
+}
+#dashboard_title {
+	font-weight: bold;
+	margin-left: 50px;
+	margin-top: 10px;
+	font-size: 25px;
+}
+#dashboard_creator {
+	margin-left: 52px;
+	margin-top: 8px;
+	font-size: 13px;
+	color: #F5F5F5;
+}
+#dashboard_header_navigator {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 2;
+	opacity: 0;
+	font-weight: bold;
+	margin-left: 50px;
+	margin-top: 18px;
+	font-size: 30px;
+}
+.dashboard_text {
+	font-family: 'Fira Sans Condensed', Arial;
+	letter-spacing: 1px;
+	color: #fff;
+	display: inline-block;
+}
+a {
+	color: #fff;
+}
+a:hover {
+	text-decoration: none;
+}
+
+/* Body */
+#dashboard_container {
+	margin: auto;
+	width: 1280px;
+	height: 800px;
+	overflow: hidden;
+	position: relative;
+}
+.category_container {
+	width: 100%;
+	height: 2000px;
+}
+.chart_container {
+	float: left;
+	margin-top: 20px;
+	margin-left: 20px;
+}
+.graph_header {
+	width: 100%;
+	height: 30px;
+	background-color: #212121;
+	opacity: 0.75;
+	position:relative;
+}
+.graph_header_nav {
+	cursor: pointer;
+}
+.graph_header_nav:hover {
+	background-color: #E1F5FE;
+}
+.header_text,
+.hover_text {
+	margin-top: 6px;
+	margin-left: 15px;
+	display: inline-block;
+	font-family: 'Pontano Sans', sans-serif;
+	letter-spacing: 1px;
+	font-size: 18px;
+}
+.header_text {
+	z-index:1;
+	top: 0px;
+	position: absolute;
+}
+.hover_text {
+	font-weight: bold;
+	z-index:2;
+	top: 0px;
+	position: absolute;
+	opacity: 0;
+}
+.hover_text a {
+	color: #337ab7;
+}
+
+/* Charts */
+#bar_container {
+	width: 610px;
+	height: 290px;
+}
+#cloud_container {
+	width: 610px;
+	height: 290px;
+}
+#bubble_container {
+	width: 610px;
+	height: 290px;
+}
+#tree_container {
+	width: 610px;
+	height: 290px;
+}
+.graph_container {
+	height: 93%;
+	width: 100%;
+	background-color: #E0E0E0;
+	opacity: 0.95;
+}
+
+/* Full View Charts */
+#fv_bar_container {
+	width: 610px;
+	height: 635px;
+}
+#fv_cloud_container {
+	width: 610px;
+	height: 635px;
+}
+#fv_bubble_container {
+	width: 610px;
+	height: 635px;
+}
+#fv_tree_container {
+	width: 610px;
+	height: 635px;
+}
+
+/* Others */
+.wc_text {
+	font-size: 20px;
+	font: sans-serif;
+}
+.axis path, .axis line {
+	fill: none;
+	stroke: #000;
+}
+path.domain {
+	stroke: none;
+}
+.y .tick line {
+	stroke: #ddd;
+}
