@@ -11,23 +11,27 @@
 </head>
 
 <body>
+
+	<!-- Background -->
+	<div class="bg_image_container"></div>
+	<div class="blur"> </div>
+	
+	<!-- Header -->
+	<div id="dashboard_header" onclick="dashboard_header_clicked()"; onmouseover="dashboard_mouseover('dashboard_header_container', 'dashboard_header_navigator')" onmouseleave="reset_graph_header()">
+		<div id ="dashboard_header_container">
+			<div id="dashboard_title" class="dashboard_text"><a>Text with Jack</a></div>
+			<br>
+			<div id="dashboard_creator" class="dashboard_text"><a>A Dashboard by Choe Choon Ho and Wong Tiong Kiat</a></div>
+		</div>
+		<div id ="dashboard_header_navigator" class="dashboard_text">
+			<a>View Dashboard Overview In Fullscreen</a>
+		</div>
+	</div>
+		
 	<div id="dashboard_container">
-		<div class="bg_image_container"></div>
-		<div class="blur"> </div>
 		
 		<div id="dashboard_content_container">
 			
-			<!-- Header -->
-			<div id="dashboard_header" onclick="dashboard_header_clicked()"; onmouseover="dashboard_mouseover('dashboard_header_container', 'dashboard_header_navigator')" onmouseleave="reset_graph_header()">
-				<div id ="dashboard_header_container">
-					<div id="dashboard_title" class="dashboard_text"><a>Text with Jack</a></div>
-					<br>
-					<div id="dashboard_creator" class="dashboard_text"><a>A Dashboard by Choe Choon Ho and Wong Tiong Kiat</a></div>
-				</div>
-				<div id ="dashboard_header_navigator" class="dashboard_text">
-					<a>View Dashboard Overview In Fullscreen</a>
-				</div>
-			</div>
 			
 			<!-- Overview -->
 			<div id="category_overview" class="category_container">
