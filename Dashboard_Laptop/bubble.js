@@ -28,7 +28,7 @@ class Bubble {
 		this.time      = 1000;
 		this.opaque    = 0.6;
 		this.font      = "'Helvetica', Helvetica, Arial, sans-serif";
-		this.box       = (parent_id) ? document.getElementById(parent_id) : null;
+		this.box       = document.getElementById(div_id);
 
 		// Pie style.
 		this.pie_width    = this.width * 0.3;
