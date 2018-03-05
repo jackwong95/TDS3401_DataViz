@@ -250,8 +250,8 @@ class Bubble {
 
 			// Move tooltip.
 			obj.tooltip
-				.style("left", d3v4.event.pageX + 15 + "px")
-				.style("top", d3v4.event.pageY + 15 + "px");
+				.style("left", d3v4.event.layerX + 15 + "px")
+				.style("top", d3v4.event.layerY + 15 + "px");
 		}
 
 		function onmouseout() {

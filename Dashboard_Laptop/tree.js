@@ -298,8 +298,8 @@ class Tree {
 
 			// Move tooltip.
 			obj.tooltip
-				.style("left", d3.event.pageX + 15 + "px")
-				.style("top", d3.event.pageY + 15 + "px");
+				.style("left", d3.event.layerX + 15 + "px")
+				.style("top", d3.event.layerY + 15 + "px");
 		}
 
 		function onmouseout() {
