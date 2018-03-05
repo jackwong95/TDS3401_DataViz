@@ -12,7 +12,8 @@ class Tree {
 	constructor(
 		div_id,
 		name=["Amazon", "IMDb", "Yelp"],
-		file=["../Data/Tree/amazon_tree.json", "../Data/Tree/imdb_tree.json", "../Data/Tree/yelp_tree.json"]
+		file=["../Data/Tree/amazon_tree.json", "../Data/Tree/imdb_tree.json", "../Data/Tree/yelp_tree.json"],
+		parent_id=null
 		) {
 
 		// Source.
@@ -28,6 +29,7 @@ class Tree {
 		this.time      = 1000;
 		this.opaque    = 0.6;
 		this.font      = "'Helvetica', Helvetica, Arial, sans-serif";
+		this.box       = document.getElementById(div_id);
 
 		// Bar style.
 		this.bar_width  = this.width * 0.3;
@@ -67,8 +69,7 @@ class Tree {
 				.text(function(opt) { return opt; });
 
 		// Tooltip.
-		this.tooltip = this.container.append("div")
-			.attr("class", "tooltip")
+		this.tooltip = d3.select("body").append("div")
 			.style("opacity", 0.0)
 			.style("position", "absolute")
 			.style("background-color", "white")
@@ -298,8 +299,8 @@ class Tree {
 
 			// Move tooltip.
 			obj.tooltip
-				.style("left", d3.event.layerX + 15 + "px")
-				.style("top", d3.event.layerY + 15 + "px");
+				.style("left", ((obj.box) ? obj.box.scrollLeft : 0) + d3.event.pageX + 15 + "px")
+				.style("top", ((obj.box) ? obj.box.scrollTop : 0) + d3.event.pageY + 15 + "px");
 		}
 
 		function onmouseout() {

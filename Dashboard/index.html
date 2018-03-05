@@ -285,14 +285,14 @@
 						30, 1, concordance_func, {"category_clicked":sync_change, "word_clicked":null});
 					
 					// Bubble.
-					var bubble = new Bubble("bubble_container", concordance_func, ["Amazon", "IMDb", "Yelp"], ["Data/amazon_bubble.json", "Data/imdb_bubble.json", "Data/yelp_bubble.json"]);
-					var fv_bubble = new Bubble("fv_bubble_container", concordance_func, ["Amazon", "IMDb", "Yelp"], ["Data/amazon_bubble.json", "Data/imdb_bubble.json", "Data/yelp_bubble.json"]);
+					var bubble = new Bubble("bubble_container", concordance_func, ["Amazon", "IMDb", "Yelp"], ["Data/amazon_bubble.json", "Data/imdb_bubble.json", "Data/yelp_bubble.json"], "dashboard_container");
+					var fv_bubble = new Bubble("fv_bubble_container", concordance_func, ["Amazon", "IMDb", "Yelp"], ["Data/amazon_bubble.json", "Data/imdb_bubble.json", "Data/yelp_bubble.json"], "dashboard_container");
 					bubble.filter.on("change", function() { sync_change(this.value); });
 					fv_bubble.filter.on("change", function() { sync_change(this.value); });
 
 					// Tree.
-					var tree = new Tree("tree_container", ["Amazon", "IMDb", "Yelp"], ["Data/amazon_tree.json", "Data/imdb_tree.json", "Data/yelp_tree.json"]);
-					var fv_tree = new Tree("fv_tree_container", ["Amazon", "IMDb", "Yelp"], ["Data/amazon_tree.json", "Data/imdb_tree.json", "Data/yelp_tree.json"]);
+					var tree = new Tree("tree_container", ["Amazon", "IMDb", "Yelp"], ["Data/amazon_tree.json", "Data/imdb_tree.json", "Data/yelp_tree.json"], "dashboard_container");
+					var fv_tree = new Tree("fv_tree_container", ["Amazon", "IMDb", "Yelp"], ["Data/amazon_tree.json", "Data/imdb_tree.json", "Data/yelp_tree.json"], "dashboard_container");
 					tree.filter.on("change", function() { sync_change(this.value); });
 					fv_tree.filter.on("change", function() { sync_change(this.value); });
 

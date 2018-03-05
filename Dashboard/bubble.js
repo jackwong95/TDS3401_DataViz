@@ -11,7 +11,8 @@ class Bubble {
 	constructor(
 		div_id, onclick=null,
 		name=["Amazon", "IMDb", "Yelp"],
-		file=["../Data/Bubble/amazon_bubble.json", "../Data/Bubble/imdb_bubble.json", "../Data/Bubble/yelp_bubble.json"]
+		file=["../Data/Bubble/amazon_bubble.json", "../Data/Bubble/imdb_bubble.json", "../Data/Bubble/yelp_bubble.json"],
+		parent_id=null
 		) {
 
 		// Source.
@@ -27,6 +28,7 @@ class Bubble {
 		this.time      = 1000;
 		this.opaque    = 0.6;
 		this.font      = "'Helvetica', Helvetica, Arial, sans-serif";
+		this.box       = (parent_id) ? document.getElementById(parent_id) : null;
 
 		// Pie style.
 		this.pie_width    = this.width * 0.3;
@@ -60,8 +62,7 @@ class Bubble {
 			.style("height", this.height + "px");
 
 		// Tooltip.
-		this.tooltip = this.container.append("div")
-			.attr("class", "tooltip")
+		this.tooltip = d3v4.select("body").append("div")
 			.style("opacity", 0.0)
 			.style("position", "absolute")
 			.style("background-color", "white")
@@ -244,15 +245,14 @@ class Bubble {
 					break;
 				}
 			}
-			
 		}
 
 		function onmousemove() {
-			
+
 			// Move tooltip.
 			obj.tooltip
-				.style("left", d3v4.event.layerX + 15 + "px")
-				.style("top", d3v4.event.layerY + 15 + "px");
+				.style("left", ((obj.box) ? obj.box.scrollLeft : 0) + d3v4.event.pageX + 15 + "px")
+				.style("top", ((obj.box) ? obj.box.scrollTop : 0) + d3v4.event.pageY + 15 + "px");
 		}
 
 		function onmouseout() {
