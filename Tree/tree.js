@@ -247,7 +247,7 @@ class Tree {
 			}
 
 			function node_radius(d) {
-				return (d.sentiment[0] + d.sentiment[1]) / (obj.root.sentiment[0] + obj.root.sentiment[1]) * obj.node_radius;
+				return Math.sqrt((d.sentiment[0] + d.sentiment[1]) / (obj.root.sentiment[0] + obj.root.sentiment[1])) * obj.node_radius;
 			}
 
 			function collapse(d) {
