@@ -138,9 +138,8 @@ class Bar {
 					.style("text-anchor", "start")
 					.text(function(d, i) { 
 						switch (i) {
-							  case 0: return "Amazon";
-							  case 1: return "IMDb";
-							  case 2: return "Yelp";
+							  case 0: return "Negative";
+							  case 1: return "Positive";	
 						}
 					});
 
